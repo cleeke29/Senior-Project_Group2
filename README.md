@@ -5,3 +5,6 @@ Team members:
 2. Kevin Clee
 3. Keigan Perry-Matson
 4. Edward Callihan
+
+
+7. Ryan Humphrey
