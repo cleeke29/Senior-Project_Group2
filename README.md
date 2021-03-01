@@ -10,6 +10,6 @@ Team members:
 7. Ryan Humphrey
 
 
-# Pitch_proto is the project code from the first live coding.
-# It contains a requirements.txt file to set up a virtual 
-# environment with the required libraries for this project.
+pitch_proto is the project code from the first live coding.
+It contains a requirements.txt file to set up a virtual 
+environment with the required libraries for this project.
