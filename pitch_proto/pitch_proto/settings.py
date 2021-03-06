@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'recommender',
+    'channels',
+    'chat',
 ]
 
 MIDDLEWARE = [
@@ -70,6 +72,15 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pitch_proto.wsgi.application'
+ASGI_APPLICATION = 'pitch_proto.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 
 # Database
@@ -78,9 +89,9 @@ WSGI_APPLICATION = 'pitch_proto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'livetest2',
-        'USER': 'myuser',
-        'PASSWORD': 'pineapple9',
+        'NAME': 'sr_proj',
+        'USER': 'postgres',
+        'PASSWORD': 'Dubl00$$',
         'HOST': '127.0.0.1',
         'PORT': '5432'
     }

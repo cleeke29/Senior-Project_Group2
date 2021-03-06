@@ -8,12 +8,12 @@ import numpy as np
 
 
 def find_albums(artist, from_year = None, to_year = None):
-    query = Musicdata.objects.filter(artists__icontains = artist)
+    query = Track.objects.filter(artists__icontains = artist)
     if from_year is not None:
         query = query.filter(year__gte = from_year)
     if to_year is not None:
         query = query.filter(year__lte = to_year)
-    return list(query.order_by('-popularity').values('id','name','year'))
+    return list(query.order_by('-track_popularity').values('track_id','track_name','year'))
     
 
 @require_POST
@@ -22,6 +22,7 @@ def searchform_post(request):
     form = SearchForm(request.POST)
     # check whether it's valid:
     if form.is_valid():
+        print('form was valid')
         # process the data in form.cleaned_data as required
         from_year = None if form.cleaned_data['from_year'] == None else int(form.cleaned_data['from_year'])
         to_year = None if form.cleaned_data['to_year'] == None else int(form.cleaned_data['to_year'])
@@ -33,6 +34,7 @@ def searchform_post(request):
             
         # Random 3 of top 10 popular albums
         albums = list(np.random.permutation(albums[:10]))[:3] 
+        print(albums)
         return render(request, 'recommender/searchform.html', {'form': form, 'albums': albums })
     else:
         raise Http404('Something went wrong')
