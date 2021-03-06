@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'recommender',
     'channels',
     'chat',
+    'jokes'
 ]
 
 MIDDLEWARE = [
@@ -82,7 +83,7 @@ CHANNEL_LAYERS = {
     },
 }
 
-
+CELERY_BROKER_URL = 'redis://localhost:6379'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 

@@ -4,11 +4,23 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-Hello {{ user.username }}!
+<p>
+    <h1>
+        Hello {{ user.username }}!
+    </h1>
+    As an authenticated user, not only do you have access to our search feature, but you can 
+    also chat and see the <strong>Universal Truths!</strong>
+</p>
+
 <p><a href="{% url 'logout' %}">Logout</a></p>
 {% else %}
-<p>You are not logged in.</p>
-<a href="{% url 'login' %}">Log In</a>
-<a href="{% url 'signup' %}">Sign Up</a>
+<p>
+    <h1>
+        Welcome Guest!
+    </h1>
+    To use our chat feature or see the <strong>Universal Truths</strong>, please login or signup!
+</p>
+<p><a href="{% url 'login' %}">Log In</a></p>
+<p><a href="{% url 'signup' %}">Sign Up</a></p>
 {% endif %}
 {% endblock %}

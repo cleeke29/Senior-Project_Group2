@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Truths{% endblock %} 
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-8 mx-auto mt5">
+                <h3 id="jokes">
+                    {{ text }}
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var socket = new WebSocket('ws://localhost:8000/ws/jokes/');
+
+        socket.onmessage = function(event){
+            var joke = event.data;
+
+            document.querySelector('#jokes').innerText = joke;
+        }
+    </script>
+{% endblock %}
