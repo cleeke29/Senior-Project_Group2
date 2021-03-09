@@ -13,3 +13,5 @@ def get_joke():
     joke = response['value']['joke']
 
     async_to_sync(channel_layer.group_send)('jokes', {'type': 'send_jokes', 'text': joke})
+
+
