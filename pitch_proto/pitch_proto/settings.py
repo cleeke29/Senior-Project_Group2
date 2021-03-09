@@ -78,9 +78,9 @@ WSGI_APPLICATION = 'pitch_proto.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'livetest2',
-        'USER': 'myuser',
-        'PASSWORD': 'pineapple9',
+        'NAME': 'recommenderdb',
+        'USER': 'rupell16',
+        'PASSWORD': 'Simran12',
         'HOST': '127.0.0.1',
         'PORT': '5432'
     }
