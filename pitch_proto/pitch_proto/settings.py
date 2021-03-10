@@ -90,7 +90,7 @@ CELERY_BROKER_URL = 'redis://localhost:6379'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'srp_test_1',
+        'NAME': 'srp_test',
         'USER': 'postgres',
         'PASSWORD': 'Dubl00$$',
         'HOST': '127.0.0.1',

@@ -14,7 +14,7 @@ class Album(models.Model):
     artist_name = models.TextField(default=None, blank=True, null=True)
     album_id = models.TextField(primary_key=True)
     album_name = models.TextField(default=None, blank=True, null=True)
-    artist_id = models.ForeignKey(Artist, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    # artist_id = models.ForeignKey(Artist, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
 class AudioFeatures(models.Model):
     # audio_features_table_id = models.AutoField(primary_key=True)
@@ -25,7 +25,7 @@ class AudioFeatures(models.Model):
     mode = models.FloatField()
     speechiness = models.FloatField()
     acousticness = models.FloatField()
-    instumentalness = models.FloatField()
+    instrumentalness = models.FloatField()
     liveness = models.FloatField()
     valence = models.FloatField()
     tempo = models.FloatField()
@@ -43,7 +43,7 @@ class Track(models.Model):
     year = models.IntegerField()
     track_number = models.IntegerField(default=None, blank=True, null=True)
     # album_table_id = models.ForeignKey(Album, on_delete=models.CASCADE, default=None, blank=True, null=True)
-    features_id = models.OneToOneField(AudioFeatures, on_delete=models.CASCADE, default=None, blank=True, null=True)
+    # features_id = models.OneToOneField(AudioFeatures, on_delete=models.CASCADE, default=None, blank=True, null=True)
     # artist_table_id = models.ForeignKey(Artist, on_delete=models.CASCADE, default=None, blank=True, null=True)
 
 class Genres(models.Model):
