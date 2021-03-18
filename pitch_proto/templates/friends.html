@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Friends{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2 class="card-header">Friends</h5>
+    <div class="card-body">
+        
+        <!--FRIENDS START HERE-->
+        <div class="row">
+            <div class="col-sm-4 py-2">
+              <div class="card">
+                <div class="card-body">
+                    <img src="" class="img-thumbnail w-25 d-inline" alt="pfp">
+                    <h5 class="card-title w-auto d-inline">@friend1</h5>
+                    </br>
+                    <a href="#" class="btn btn-danger mt-2">Remove</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-4 py-2">
+              <div class="card">
+                <div class="card-body">
+                    <img src="" class="img-thumbnail w-25 d-inline" alt="pfp">
+                    <h5 class="card-title w-auto d-inline">@friend2</h5>
+                    </br>
+                    <a href="#" class="btn btn-danger mt-2">Remove</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-4 py-2">
+                <div class="card">
+                  <div class="card-body">
+                    <img src="" class="img-thumbnail w-25 d-inline" alt="pfp">
+                    <h5 class="card-title w-auto d-inline">@friend3</h5>
+                    </br>
+                    <a href="#" class="btn btn-danger mt-2">Remove</a>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-4 py-2">
+                <div class="card">
+                  <div class="card-body">
+                    <img src="" class="img-thumbnail w-25 d-inline" alt="pfp">
+                    <h5 class="card-title w-auto d-inline">@friend4</h5>
+                    </br>
+                    <a href="#" class="btn btn-danger mt-2">Remove</a>
+                  </div>
+                </div>
+              </div>
+
+          </div>
+        <!--FRIENDS END HERE-->
+      
+    </div>
+    <div class="card-footer">
+        
+        <form class="row g-3">
+            <div class="col-auto">
+              <p class="pt-2">Add a Friend:</p>
+            </div>
+            <div class="col-auto">
+              <label for="inputUsername" class="visually-hidden">username</label>
+              <input type="username" class="form-control" id="inputUsername" placeholder="username">
+            </div>
+            <div class="col-auto">
+              <button type="submit" class="btn btn-secondary mb-3">+</button>
+            </div>
+          </form>
+
+    </div>
+  </div>
+{% endblock %}
