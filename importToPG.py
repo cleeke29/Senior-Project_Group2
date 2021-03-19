@@ -16,35 +16,24 @@ def remove_dups(csvfile, col, output=None):
     dupfree.to_csv(outfile, index=False)
     print(f'{dups} unique ids')
 
+
+
 if __name__ == '__main__':
-    # mydata = pd.read_csv('my_data.csv')
-    # print(mydata.head())
+    
+    connect_string = "host=localhost dbname=pitch_db user=admin password=admin"
 
-    # conn2 = psycopg2.connect("host=localhost dbname=livetest2 user=myuser password=pineapple9")
-    # cur2 = conn2.cursor()
-    # with open('my_data.csv', 'r') as f:
-    #     reader = csv.reader(f, quotechar='"')
-    #     next(reader)
-    #     for row in reader:
-    #         cur2.execute(
-    #             "INSERT INTO recommender_musicdata VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
-    #             row
-    #         )
-    # conn2.commit()
-
-    #######################################################################################################################
-    connect_string = "host=localhost dbname=srp_test user=postgres password=postgres"
-
-    remove_dups('albums.csv', 'album_id', output='albums_v2.csv')
-    remove_dups('full_tracks.csv', 'id', output='full_tracks_v2.csv')
-    remove_dups('audio_features.csv', 'id', output='audio_features_v2.csv')
+    # remove_dups('albums.csv', 'album_id', output='albums_v2.csv')
+    # remove_dups('full_tracks.csv', 'id', output='full_tracks_v2.csv')
+    # remove_dups('audio_features.csv', 'id', output='audio_features_v2.csv')
+    # remove_dups('audio_features_v2.csv', 'id')
 
 
 
+    # Insert artists_w_genres_pop.csv into the postgres database.
     print("starting artists")
     conn2 = psycopg2.connect(connect_string)
     cur2 = conn2.cursor()
-    with open('artists_w_genres_pop.csv', 'r') as f:
+    with open('artists_w_genres_pop.csv', 'r', encoding='utf8') as f:
         reader = csv.reader(f, quotechar='"')
         next(reader)
         for row in reader:
@@ -58,12 +47,15 @@ if __name__ == '__main__':
                 print("issue in ")
                 continue
     conn2.commit()
-    
+
+
+
+    # Insert albums_v2.csv into the postgres database.
     print("starting albums")
     conn2 = psycopg2.connect(connect_string)
     cur2 = conn2.cursor()
     count = errors = successes = 0
-    with open('albums_v2.csv', 'r') as f:
+    with open('albums_v2.csv', 'r', encoding='utf8') as f:
         reader = csv.reader(f, quotechar='"')
         next(reader)
         for row in reader:
@@ -85,11 +77,14 @@ if __name__ == '__main__':
     print(f'{successes} total successes')
     conn2.commit()
 
+
+
+    # Insert audio_features_v2.csv into the postgres database.
     print("starting audio_features")
     conn2 = psycopg2.connect(connect_string)
     cur2 = conn2.cursor()
     count = successes = failures = 0
-    with open('audio_features.csv', 'r') as f:
+    with open('audio_features_v2.csv', 'r', encoding='utf8') as f:
         reader = csv.reader(f, quotechar='"')
         next(reader)
         for row in reader:
@@ -114,11 +109,14 @@ if __name__ == '__main__':
     print(f'{count} total rows')
     print(f'{successes} successful rows')
 
+    
+    
+    # Insert full_tracks_v2.csv into the postgres database.    
     print("starting tracks")
     conn2 = psycopg2.connect(connect_string)
     cur2 = conn2.cursor()
     count = successes = failures = 0
-    with open('full_tracks_v2.csv', 'r') as f:
+    with open('full_tracks_v2.csv', 'r', encoding='utf8') as f:
         reader = csv.reader(f, quotechar='"')
         next(reader)
         for row in reader:
@@ -142,10 +140,13 @@ if __name__ == '__main__':
     print(f'{count} total rows')
     print(f'{successes} successful rows')
 
+
+
+    # Insert genres.csv into the postgres database.
     print("starting genres")
     conn2 = psycopg2.connect(connect_string)
     cur2 = conn2.cursor()
-    with open('genres.csv', 'r') as f:
+    with open('genres.csv', 'r', encoding='utf8') as f:
         reader = csv.reader(f, quotechar='"')
         next(reader)
         for row in reader:
@@ -160,10 +161,13 @@ if __name__ == '__main__':
                 continue
     conn2.commit()
 
+
+
+    # Insert categories.csv into the postgres database.
     print("starting categories")
     conn2 = psycopg2.connect(connect_string)
     cur2 = conn2.cursor()
-    with open('categories.csv', 'r') as f:
+    with open('categories.csv', 'r', encoding='utf8') as f:
         reader = csv.reader(f, quotechar='"')
         next(reader)
         for row in reader:
@@ -178,3 +182,12 @@ if __name__ == '__main__':
                 continue
     conn2.commit()
 
+# class Genres(models.Model):
+#     # genre_table_id = models.AutoField(primary_key=True)
+#     genre_id = models.TextField(primary_key=True)
+#     # genre_name = models.TextField()
+
+# class Categories(models.Model):
+#     # categories_table_id = models.AutoField(primary_key=True)
+#     category_id = models.TextField(primary_key=True)
+#     category_name = models.TextField()
