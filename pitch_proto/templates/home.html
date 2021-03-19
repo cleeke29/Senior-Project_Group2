@@ -1,14 +1,169 @@
 {% extends 'base.html' %}
+{% comment %}
 
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
 {% if user.is_authenticated %}
-Hello {{ user.username }}!
-<p><a href="{% url 'logout' %}">Logout</a></p>
+<h2>Hello {{ user.username }}!</h3>
+<p>Welcome to Pitch! More home page functionality is on the way, but for now
+    you can access everything we have to offer through the navigation bar above.
+</p>
+<p><a class="btn btn-secondary" href="{% url 'logout' %}">Logout</a></p>
+
 {% else %}
-<p>You are not logged in.</p>
-<a href="{% url 'login' %}">Log In</a>
-<a href="{% url 'signup' %}">Sign Up</a>
+<h2>You are not logged in.</h3>
+<p>To access the full functionality of Pitch, you may want to 
+    login or sign up.
+</p>
+<a class="btn btn-secondary" href="{% url 'login' %}">Log In</a>
+<a class="btn btn-secondary" href="{% url 'signup' %}">Sign Up</a>
 {% endif %}
+
+{% endblock %} {% endcomment %}
+
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<h2>Hello {{ user.username }}!</h3>
+<div class = "container">
+    <div class="row">
+        <div class = "col-sm-9">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Recommended</h5>
+
+                    <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                          <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner" align="center">
+                          <div class="carousel-item active">
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                          </div>
+                          <div class="carousel-item">
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                          </div>
+                          <div class="carousel-item">
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                          </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"  data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"  data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                        </button>
+                      </div>
+        
+                </div>
+            </div>
+            <br/>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Recent Favorites</h5>
+
+                    <div id="carouselExampleIndicators2" class="carousel slide" data-bs-ride="carousel">
+                        <div class="carousel-indicators">
+                          <button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                          <button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                          <button type="button" data-bs-target="#carouselExampleIndicators2" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner" align="center">
+                          <div class="carousel-item active">
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                          </div>
+                          <div class="carousel-item">
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                          </div>
+                          <div class="carousel-item">
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                            <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="240" height="280" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                          </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators2"  data-bs-slide="prev">
+                          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators2"  data-bs-slide="next">
+                          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                          <span class="visually-hidden">Next</span>
+                        </button>
+                      </div>
+        
+                </div>
+            </div>
+            <br/>
+        </div>
+        <div class = "col-sm-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Comments</h5>
+                    <br/>
+                    <br/><br/><br/>
+            
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% else %}
+
+<div class="card" style="width: 18rem;">
+    <div class="card-body">
+      <h5 class="card-title">You are not logged in.</h5>
+      <p class="card-text">Login or sign up to pitch here:</p>
+      <a class="btn btn-secondary" href="{% url 'login' %}">Log In</a>
+<a class="btn btn-secondary" href="{% url 'signup' %}">Sign Up</a>
+    </div>
+  </div>
+
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner" align="center">
+      <div class="carousel-item active">
+        <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      </div>
+      <div class="carousel-item">
+        <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      </div>
+      <div class="carousel-item">
+        <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <iframe src="https://open.spotify.com/embed/track/6mFkJmJqdDVQ1REhVfGgd1" width="300" height="380" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators"  data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators"  data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+  </div>
+{% endif %}
+
 {% endblock %}
