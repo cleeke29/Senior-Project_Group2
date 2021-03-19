@@ -4,6 +4,6 @@ from . import views
 # app_name = 'recommender'
 
 urlpatterns = [
-    path('best/', views.searchform_get, name='best'),
-    path('bestp/', views.searchform_post, name='bestp'),
+    path('advanced-search/', views.searchform_get, name='advanced-search'),
+    path('advanced-results/', views.searchform_post, name='advanced-results'),
 ]
