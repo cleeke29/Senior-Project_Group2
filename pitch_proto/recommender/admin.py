@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Musicdata
+from .models import Categories, Artist, Album, AudioFeatures,Track, Genres
 
 # Register your models here.
 admin.site.register(Categories)
