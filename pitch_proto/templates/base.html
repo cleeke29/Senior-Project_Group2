@@ -39,14 +39,10 @@
                     </ul>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="{% url 'edit_settings' %}">Settings</a>
+                    <a class="nav-link" href="#">Settings</a>
                   </li>
                   <li class="nav-item">
-                    {%  if user.profile.id %}
-                    <a class="nav-link" href="{% url 'profile' user.profile.id %}">Profile</a>
-                    {% else %}
-                    <a class="nav-link" href="{% url 'create_profile' %}">Create Profile</a>
-                    {% endif %}
+                    <a class="nav-link" href="#">Profile</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="{% url 'logout' %}">Logout</a>
