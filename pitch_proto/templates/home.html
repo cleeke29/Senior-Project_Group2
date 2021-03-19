@@ -1,28 +1,4 @@
 {% extends 'base.html' %}
-{% comment %}
-
-{% block title %}Home{% endblock %}
-
-{% block content %}
-
-{% if user.is_authenticated %}
-<h2>Hello {{ user.username }}!</h3>
-<p>Welcome to Pitch! More home page functionality is on the way, but for now
-    you can access everything we have to offer through the navigation bar above.
-</p>
-<p><a class="btn btn-secondary" href="{% url 'logout' %}">Logout</a></p>
-
-{% else %}
-<h2>You are not logged in.</h3>
-<p>To access the full functionality of Pitch, you may want to 
-    login or sign up.
-</p>
-<a class="btn btn-secondary" href="{% url 'login' %}">Log In</a>
-<a class="btn btn-secondary" href="{% url 'signup' %}">Sign Up</a>
-{% endif %}
-
-{% endblock %} {% endcomment %}
-
 
 {% block title %}Home{% endblock %}
 
@@ -32,11 +8,12 @@
 <h2>Hello {{ user.username }}!</h3>
 <div class = "container">
     <div class="row">
+
+        <!--Carousel Column-->
         <div class = "col-sm-9">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Recommended</h5>
-
                     <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                         <div class="carousel-indicators">
                           <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -108,11 +85,19 @@
             </div>
             <br/>
         </div>
+        <!--Comments Column-->
         <div class = "col-sm-3">
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title">Comments</h5>
-                    <br/>
+                    <!--Comments go here-->
+                    <div class="card mt-2 ms-1">
+                      <div class="card-body">
+                        <h5 class="card-title">Commenter Name</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">@uname</h6>
+                        <p class="card-text">Dr. Baliga is cool</p>
+                      </div>
+                    </div>
                     <br/><br/><br/>
             
                 </div>
