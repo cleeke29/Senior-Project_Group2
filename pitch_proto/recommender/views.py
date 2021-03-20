@@ -8,12 +8,12 @@ import numpy as np
 
 
 def find_albums(artist, from_year = None, to_year = None):
-    query = Musicdata.objects.filter(artists__icontains = artist)
+    query = Track.objects.filter(artists__icontains = artist)
     if from_year is not None:
         query = query.filter(year__gte = from_year)
     if to_year is not None:
         query = query.filter(year__lte = to_year)
-    return list(query.order_by('-popularity').values('id','name','year'))
+    return list(query.order_by('-track_popularity').values('track_id','track_name','year'))
     
 
 @require_POST
