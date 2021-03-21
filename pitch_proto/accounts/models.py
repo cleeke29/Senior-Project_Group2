@@ -4,6 +4,7 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     friends = models.ManyToManyField("User", blank=True)
     image = models.ImageField(upload_to='profile_images')
+    dark_mode = models.BooleanField(default=True)
     def __str__(self):
         return self.username
 
