@@ -25,6 +25,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('recommender/', include('recommender.urls')),
-    path('group/', include('partyroom.urls'))
+    path('group/', include('partyroom.urls')),
+    path('recommendation/', include('recommendationTest.urls')),
+    path('settings/', include('settings.urls'))
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
