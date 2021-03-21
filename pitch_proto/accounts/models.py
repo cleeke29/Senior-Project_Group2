@@ -3,7 +3,7 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     friends = models.ManyToManyField("User", blank=True)
-
+    image = models.ImageField(upload_to='profile_images')
     def __str__(self):
         return self.username
 
@@ -15,3 +15,4 @@ class Friend_Request(models.Model):
     to_user = models.ForeignKey(
         User, related_name='to_user', on_delete=models.CASCADE
     )
+

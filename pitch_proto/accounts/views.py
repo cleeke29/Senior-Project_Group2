@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, UpdateImageForm
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from .models import Friend_Request, User
 from django.http import HttpResponse
+from django.db.models import Q 
 
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
@@ -39,14 +40,35 @@ def accept_friend_request(request, requestID):
 
 @login_required
 def friends_list(request):
-    allusers = User.objects.all()
-    all_friend_requests = Friend_Request.objects.all()
+    allusers = User.objects.all().filter(is_superuser=False).exclude(id=request.user.id)
+
+    all_friend_requests = Friend_Request.objects.all().filter(from_user_id=request.user.id)
     my_friends = request.user.friends.all()
+    
     my_requests = all_friend_requests.filter(from_user_id=request.user.id).values_list('to_user_id', flat=True)
     my_pending = all_friend_requests.filter(to_user_id=request.user.id).values_list('from_user_id', flat=True)
+    may_know = allusers.exclude(id__in=my_requests).exclude(id__in=my_pending)
     return render(request, 'friends.html', {'allusers': allusers,
                                             'all_friend_requests': all_friend_requests,
                                             'my_friends': my_friends,
                                             'my_requests': my_requests,
-                                            'my_pending': my_pending}
+                                            'my_pending': my_pending,
+                                            'may_know': may_know}
                                             )
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        form = UpdateImageForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            edit = form.save(commit=False)
+            edit.save()
+            return redirect('profile')
+    else:
+        form = UpdateImageForm()
+
+    context = {
+        'form': form
+    }
+
+    return render(request, 'profile.html', context)

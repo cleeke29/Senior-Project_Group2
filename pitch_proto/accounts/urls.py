@@ -1,5 +1,5 @@
 from django.urls import path 
-from .views import SignUpView, accept_friend_request, send_friend_request, friends_list
+from .views import SignUpView, accept_friend_request, send_friend_request, friends_list, profile
 from django.views.generic.base import TemplateView
 
 urlpatterns = [ 
@@ -11,4 +11,6 @@ urlpatterns = [
     path('accept_friend_request/<int:requestID>/',
         accept_friend_request,
         name='accept_friend_request'),
+    path('profile/', profile, name='profile'),
+    
 ]

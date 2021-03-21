@@ -1,0 +1,27 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block title %}Profile{% endblock %} 
+
+{% block content %}
+
+{% if user.image %}
+
+<img src="{{ user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';" style="max-width: 200px;">
+{{ user }}
+{% else %} 
+<img src="/media/default.jpg" style="max-width: 200px;"> {{ user }}
+{% endif %} 
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %} 
+    <fieldset class="form-group">
+        <legend class="border-bottom mb-4">Profile Info</legend>
+        {{ form.image }}
+    </fieldset>
+    <div class="form-group">
+        <button class="" type="submit">Update</button>
+    </div>
+
+</form>
+
+{% endblock %} 

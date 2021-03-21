@@ -10,3 +10,9 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = User
         fields =('username', 'email')
+
+class UpdateImageForm(UserChangeForm):
+    
+    class Meta:
+        model = User
+        fields = ('image',)

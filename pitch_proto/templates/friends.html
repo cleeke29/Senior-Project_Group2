@@ -2,127 +2,161 @@
 
 {% block title %}Friends{% endblock %}
 
+{% block head %} 
+
+<style>
+  .icon {
+    max-width: 100px;
+    max-height: 100px;
+  }
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="card">
-    <h2 class="card-header">Friends</h5>
-    <div class="card-body">
 
-        <!--FRIENDS START HERE-->
-        <div class="row">
-            <div class="col-sm-4 py-2">
-              <div class="card">
-                <div class="card-body">
-                    <img src="" class="img-thumbnail w-25 d-inline" alt="pfp">
-                    <h5 class="card-title w-auto d-inline">@friend1</h5>
-                    </br>
-                    <a href="#" class="btn btn-danger mt-2">Remove</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm-4 py-2">
-              <div class="card">
-                <div class="card-body">
-                    <img src="" class="img-thumbnail w-25 d-inline" alt="pfp">
-                    <h5 class="card-title w-auto d-inline">@friend2</h5>
-                    </br>
-                    <a href="#" class="btn btn-danger mt-2">Remove</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-sm-4 py-2">
-                <div class="card">
-                  <div class="card-body">
-                    <img src="" class="img-thumbnail w-25 d-inline" alt="pfp">
-                    <h5 class="card-title w-auto d-inline">@friend3</h5>
-                    </br>
-                    <a href="#" class="btn btn-danger mt-2">Remove</a>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col-sm-4 py-2">
-                <div class="card">
-                  <div class="card-body">
-                    <img src="" class="img-thumbnail w-25 d-inline" alt="pfp">
-                    <h5 class="card-title w-auto d-inline">@friend4</h5>
-                    </br>
-                    <a href="#" class="btn btn-danger mt-2">Remove</a>
-                  </div>
-                </div>
-              </div>
-
-          </div>
-        <!--FRIENDS END HERE-->
       
+  <div class="card">
+    <h2 class="card-header">Friends</h2>
+    <div class="card-body">
+      <div class="row">
+
+        {% for friend in my_friends %}
+        
+        <div class="col-sm-4 py-2">
+          <div class="card">
+            <div class="card-body">
+              
+              {% if friend.image %} 
+                <img class="img-thumbnail w-25 d-inline"  src="{{ friend.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
+              {% else %} 
+                <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
+              {% endif %}
+                {{ friend }}
+            </br>
+                <a href="#" class="btn btn-danger mt-2">Remove</a>
+            </div>
+          </div>
+        </div>
+        {% endfor %} 
+      </div>
+
     </div>
     <div class="card-footer">
         
-        <form class="row g-3">
-            <div class="col-auto">
-              <p class="pt-2">Add a Friend:</p>
-            </div>
-            <div class="col-auto">
-              <label for="inputUsername" class="visually-hidden">username</label>
-              <input type="username" class="form-control" id="inputUsername" placeholder="username">
-            </div>
-            <div class="col-auto">
-              <button type="submit" class="btn btn-secondary mb-3">+</button>
-            </div>
-          </form>
+      <form class="row g-3">
+        <div class="col-auto">
+          <p class="pt-2">Add a Friend:</p>
+        </div>
+        <div class="col-auto">
+          <label for="inputUsername" class="visually-hidden">username</label>
+          <input type="username" class="form-control" id="inputUsername" placeholder="username">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-secondary mb-3">+</button>
+        </div>
+      </form>
 
     </div>
   </div>
-<h1>People You May Know</h1>
-<ul class='all_users'>
-  {% for user in allusers %} 
-  {% if not user.is_superuser %} 
-  {% if user not in request.user.friends.all and user != request.user and user.id not in my_requests and user.id not in my_pending %} 
-  <li>
-    {{ user }} 
-    <a href="{% url 'send_friend_request' userID=user.id %}">send friend request</a>
-  </li>
-  
-  {% endif %} 
-  {% endif %}
-  {% endfor %} 
-</ul>
-<h1>Sent Requests</h1>
-<ul>
-  {% for friend_request in all_friend_requests %}
-  {% if friend_request.from_user.id == user.id %}
-  {% if friend_request.to_user.id != user.id %}
 
-  <li>
-    {{ friend_request.to_user }} request sent.
-  </li>
 
-  {% endif %} 
-  {% endif %} 
-  {% endfor %}
-</ul>
-<h1>Friend Requests</h1>
-<ul class="all_requests">
-  {% for friend_request in all_friend_requests %}
-  {% if friend_request.from_user.id != user.id %}
-  {% if friend_request.to_user.id == user.id %}
-  <li>
-    {{ friend_request.from_user }}
-    <a href="{% url 'accept_friend_request' requestID=friend_request.id %}">accept friend request</a>
-  </li>
-  {% endif %} 
-  {% endif %} 
-  {% endfor %} 
-</ul>
-<p>
-  <h1>{{ user }}'s friends</h1>
-</p>
-<ul id="my_friends">
-  {% for friend in my_friends %}
-  <li>
-    {{ friend }}
-  </li>
-  {% endfor %} 
-</ul>
+
+
+  <div class="card">
+    <h2 class="card-header">Sent Requests</h2>
+    <div class="card-body">
+      <div class="row">
+        {% for friend_request in all_friend_requests %}
+        
+
+        <div class="col-sm-4 py-2">
+          <div class="card">
+            <div class="card-body">
+
+              {% if friend_request.to_user.image %}
+                <img class="icon" src="{{ friend_request.to_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';" style="max-width: 200px;">
+              {% else %} 
+                <img class="icon" src="/media/default.jpg">
+              {% endif %}
+                {{ friend_request.to_user }}
+                </br>
+                <a href="#" class="btn btn-danger mt-2">Unsend</a>
+            </div>
+          </div>
+        </div>
+         
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="card">
+    <h2 class="card-header">Pending Requests</h2>
+    <div class="card-body">
+      <div class="row">
+        {% for friend_request in all_friend_requests %}
+        {% if friend_request.from_user.id != user.id %}
+        {% if friend_request.to_user.id == user.id %}
+        <div class="col-sm-4 py-2">
+          <div class="card">
+            <div class="card-body">
+
+              {% if friend_request.from_user.image %}
+                <img class="icon" src="{{ friend_request.from_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
+              {% else %}
+                <img class="icon" src="/media/default.jpg">
+              {% endif %}
+                {{ friend_request.from_user }}
+                </br>
+                <a href="{% url 'accept_friend_request' requestID=friend_request.id %}" class="btn btn-danger mt-2">Accept</a>
+            </div>
+          </div>
+        </div>
+        {% endif %} 
+        {% endif %} 
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="card">
+    <h2 class="card-header">People You May Know</h2>
+    <div class="card-body">
+      <div class="row">
+
+        {% for user in allusers %} 
+        {% if not user.is_superuser %} 
+        {% if user not in request.user.friends.all and user != request.user and user.id not in my_requests and user.id not in my_pending %} 
+        <div class="col-sm-4 py-2">
+          <div class="card">
+            <div class="card-body">
+              {% if user.image %}
+                <img class="icon" src="{{ user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
+              {% else %} 
+                <img class="icon" src="/media/default.jpg">
+              {% endif %}
+              {{ user }} 
+                </br>
+                <a href="{% url 'send_friend_request' userID=user.id %}" class="btn btn-danger mt-2">Request</a>
+            </div>
+          </div>
+        </div>
+        {% endif %} 
+        {% endif %}
+        {% endfor %} 
+
+      </div>
+    </div>
+  </div>
+<!--  -->
+
+
+
+
 {% endblock %}
