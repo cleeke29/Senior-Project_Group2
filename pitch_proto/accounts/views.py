@@ -44,9 +44,9 @@ def friends_list(request):
 
     all_friend_requests = Friend_Request.objects.all().filter(from_user_id=request.user.id)
     my_friends = request.user.friends.all()
-    
+    my_pending = Friend_Request.objects.all().filter(to_user_id=request.user.id)
     my_requests = all_friend_requests.filter(from_user_id=request.user.id).values_list('to_user_id', flat=True)
-    my_pending = all_friend_requests.filter(to_user_id=request.user.id).values_list('from_user_id', flat=True)
+    # my_pending = all_friend_requests.filter(to_user_id=request.user.id).values_list('from_user_id', flat=True)
     may_know = allusers.exclude(id__in=my_requests).exclude(id__in=my_pending)
     return render(request, 'friends.html', {'allusers': allusers,
                                             'all_friend_requests': all_friend_requests,

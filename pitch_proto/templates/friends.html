@@ -97,7 +97,7 @@
     <h2 class="card-header">Pending Requests</h2>
     <div class="card-body">
       <div class="row">
-        {% for friend_request in all_friend_requests %}
+        {% for friend_request in my_pending  %}
         {% if friend_request.from_user.id != user.id %}
         {% if friend_request.to_user.id == user.id %}
         <div class="col-sm-4 py-2">
@@ -132,7 +132,7 @@
 
         {% for user in allusers %} 
         {% if not user.is_superuser %} 
-        {% if user not in request.user.friends.all and user != request.user and user.id not in my_requests and user.id not in my_pending %} 
+        {% if user not in request.user.friends.all and user != request.user and user not in all_friend_requests and user.id not in my_pending %} 
         <div class="col-sm-4 py-2">
           <div class="card">
             <div class="card-body">
@@ -151,12 +151,9 @@
         {% endif %}
         {% endfor %} 
 
-      </div>
     </div>
   </div>
 <!--  -->
 
 
 
-
-{% endblock %}
