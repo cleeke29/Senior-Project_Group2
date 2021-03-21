@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'accounts',
     'recommender',
+    'recommendationTest',
+    'settings',
 ]
 
 MIDDLEWARE = [

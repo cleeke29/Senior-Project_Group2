@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Recommendations{% endblock %}
+
+{% block content %}
+
+<h1> Heres Some Songs you might like: </h1>
+
+<table>
+		<tr>
+			<td>
+				<iframe src="https://open.spotify.com/embed/track/{{ dance }}" width="300" height="380" 
+				frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+			</td>
+			<td>
+				<iframe src="https://open.spotify.com/embed/track/{{ acoustic }}" width="300" height="380" 
+				frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+			</td>
+			<td>
+				<iframe src="https://open.spotify.com/embed/track/{{ tempo }}" width="300" height="380" 
+				frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+			</td>
+		</tr>
+</table>
+
+{% endblock%}

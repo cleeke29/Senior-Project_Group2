@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+
+{% block title %}Test Danceability{% endblock %}
+{% block content %}
+<form method = 'post' action = '{% url "test2" %}'>
+	{% csrf_token %}
+	<table>
+		<tr>
+			<td>
+				<iframe src="https://open.spotify.com/embed/track/{{ songidLow }}" width="300" height="380" 
+				frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+				<div>
+					Like: {{ form.sampleOne }}
+				</div>
+			</td>
+			<td>
+				<iframe src="https://open.spotify.com/embed/track/{{ songidMid }}" width="300" height="380" 
+				frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+				<div>
+					Like: {{ form.sampleTwo }}
+				</div>
+			</td>
+			<td>
+				<iframe src="https://open.spotify.com/embed/track/{{ songidHigh }}" width="300" height="380" 
+				frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+				<div>
+					Like: {{ form.sampleTwo }}
+				</div>
+			</td>
+		</tr>
+			<td>
+				<button class="btn btn-primary btn-lg" type="submit">Next</button>
+			</td>
+		<tr>
+
+		</tr>
+	</table>
+</form>
+{% endblock %}
