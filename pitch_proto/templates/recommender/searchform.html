@@ -1,25 +1,37 @@
 {% extends 'base.html' %}
 
-{% block title %} Music Search {% endblock %}
+{% block title %} Advanced Search {% endblock %}
 
 {% block content %}
 <form method='post' action="/recommender/advanced-results/">
     {% csrf_token %}
     <br>
     <center>
-        <h2>Music Search</h2>
+        <h2>Advanced Search</h2>
     </center>
+    <br>
+    <div>
+        Song: {{ form.song }}
+    </div>
     <br>
     <div>
         Artist: {{ form.artist }}
     </div>
     <br>
     <div>
-        From year: {{ form.from_year }}
+        Album: {{ form.album }}
     </div>
     <br>
     <div>
-        To year: {{ form.to_year }}
+        From Year: {{ form.from_year }}
+    </div>
+    <br>
+    <div>
+        To Year: {{ form.to_year }}
+    </div>
+    <br>
+    <div>
+        Number of Songs to Show: {{ form.number_of_songs }}
     </div>
     <br>
 
