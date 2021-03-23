@@ -41,17 +41,18 @@ def accept_friend_request(request, requestID):
 @login_required
 def friends_list(request):
     allusers = User.objects.all().filter(is_superuser=False).exclude(id=request.user.id)
-
-    all_friend_requests = Friend_Request.objects.all().filter(from_user_id=request.user.id)
     my_friends = request.user.friends.all()
+    all_friend_requests = Friend_Request.objects.all().filter(from_user_id=request.user.id)
     my_pending = Friend_Request.objects.all().filter(to_user_id=request.user.id)
-    my_requests = all_friend_requests.filter(from_user_id=request.user.id).values_list('to_user_id', flat=True)
-    # my_pending = all_friend_requests.filter(to_user_id=request.user.id).values_list('from_user_id', flat=True)
-    may_know = allusers.exclude(id__in=my_requests).exclude(id__in=my_pending)
-    return render(request, 'friends.html', {'allusers': allusers,
-                                            'all_friend_requests': all_friend_requests,
+    
+
+    my_requests_vals = all_friend_requests.filter(from_user_id=request.user.id).values_list('to_user_id', flat=True)
+    friend_vals = my_friends.values_list('id', flat=True)
+    my_pending_vals = my_pending.values_list('from_user_id', flat=True)
+    may_know = allusers.exclude(id__in=my_requests_vals).exclude(id__in=my_pending_vals).exclude(id__in=friend_vals)
+    
+    return render(request, 'friends.html', {'all_friend_requests': all_friend_requests,
                                             'my_friends': my_friends,
-                                            'my_requests': my_requests,
                                             'my_pending': my_pending,
                                             'may_know': may_know}
                                             )
