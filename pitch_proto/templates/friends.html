@@ -74,9 +74,9 @@
             <div class="card-body">
 
               {% if friend_request.to_user.image %}
-                <img class="icon" src="{{ friend_request.to_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';" style="max-width: 200px;">
+                <img class="img-thumbnail w-25 d-inline" src="{{ friend_request.to_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';" style="max-width: 200px;">
               {% else %} 
-                <img class="icon" src="/media/default.jpg">
+                <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
               {% endif %}
                 {{ friend_request.to_user }}
                 </br>
@@ -98,16 +98,15 @@
     <div class="card-body">
       <div class="row">
         {% for friend_request in my_pending  %}
-        {% if friend_request.from_user.id != user.id %}
-        {% if friend_request.to_user.id == user.id %}
+        
         <div class="col-sm-4 py-2">
           <div class="card">
             <div class="card-body">
 
               {% if friend_request.from_user.image %}
-                <img class="icon" src="{{ friend_request.from_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
+                <img class="img-thumbnail w-25 d-inline" src="{{ friend_request.from_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
               {% else %}
-                <img class="icon" src="/media/default.jpg">
+                <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
               {% endif %}
                 {{ friend_request.from_user }}
                 </br>
@@ -115,8 +114,7 @@
             </div>
           </div>
         </div>
-        {% endif %} 
-        {% endif %} 
+         
         {% endfor %}
       </div>
     </div>
@@ -130,16 +128,14 @@
     <div class="card-body">
       <div class="row">
 
-        {% for user in allusers %} 
-        {% if not user.is_superuser %} 
-        {% if user not in request.user.friends.all and user != request.user and user not in all_friend_requests and user.id not in my_pending %} 
-        <div class="col-sm-4 py-2">
+        {% for user in may_know %} 
+       <div class="col-sm-4 py-2">
           <div class="card">
             <div class="card-body">
               {% if user.image %}
-                <img class="icon" src="{{ user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
+                <img class="img-thumbnail w-25 d-inline" src="{{ user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
               {% else %} 
-                <img class="icon" src="/media/default.jpg">
+                <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
               {% endif %}
               {{ user }} 
                 </br>
@@ -147,8 +143,7 @@
             </div>
           </div>
         </div>
-        {% endif %} 
-        {% endif %}
+        
         {% endfor %} 
 
     </div>
