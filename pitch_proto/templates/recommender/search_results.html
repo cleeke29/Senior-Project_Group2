@@ -1,0 +1,38 @@
+{% extends 'base.html' %} 
+
+{% block title %}Results{% endblock %} 
+
+{% block content %} 
+<div>
+    <h2>Search Results</h2>
+    <div class="row">
+        {% for album in albums %}
+            <div class="col-xs-6 col-sm-4">
+                <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
+                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            </div>
+            
+        {% endfor %}
+    </div>
+    
+    {% if albums.paginator.num_pages > 1 %}
+        <ul class="pagination">
+        {% if albums.has_previous %}
+    
+        <li class="page-item"><a class="page-link" href="?page={{ albums.previous_page_number }}">previous</a></li>
+    
+        {% endif %}
+    
+        <li class="page-item"><a class="page-link" href="#">Page {{ albums.number }} of {{ albums.paginator.num_pages }}</a></li>
+    
+        {% if albums.has_next %}
+    
+            <li class="page-item"><a class="page-link" href="?page={{ albums.next_page_number }}">next</a></li>
+    
+        {% endif %}
+        </ul>
+    {% endif %}
+        
+</div>
+
+{% endblock %} 

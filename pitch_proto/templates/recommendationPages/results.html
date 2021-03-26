@@ -7,9 +7,9 @@
 <h1> Results </h1>
 
 <p> your data: <br />
-	Average danceability: {{ dance }}<br />
-	Average acousticness: {{ acousticness }}<br />
-	Average tempo: {{ tempo }}</p>
+	Average Danceability: {{ dance }}<br />
+	Average Acousticness: {{ acousticness }}<br />
+	Average Tempo: {{ tempo }}</p>
 <form method = 'post' action = '{% url "final" %}'>
 	{% csrf_token %}
 	<button type="submit" class="btn btn-dark">Recommendations</button>
