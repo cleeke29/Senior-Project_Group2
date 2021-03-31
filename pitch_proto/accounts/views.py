@@ -1,6 +1,7 @@
-from django.shortcuts import render, redirect
-from django.views.generic.edit import CreateView
-from .forms import CustomUserCreationForm, UpdateImageForm
+from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic import DetailView
+from .forms import CustomUserCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from .models import Friend_Request, User
@@ -57,19 +58,23 @@ def friends_list(request):
                                             'may_know': may_know}
                                             )
 
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        form = UpdateImageForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            edit = form.save(commit=False)
-            edit.save()
-            return redirect('profile')
-    else:
-        form = UpdateImageForm()
+def profileRedirectView(request):
+    return redirect('http://localhost:8000/accounts/' + str(request.user.id) + '/profile')
 
-    context = {
-        'form': form
-    }
 
-    return render(request, 'profile.html', context)
+class EditProfileView(UpdateView):
+    model = User
+    template_name = 'edit_profile.html'
+    success_url = reverse_lazy('find_profile')
+    fields = ['bio', 'image']
+
+class ProfilePageView(DetailView):
+    model = User
+    template_name = 'profile.html'
+
+    def get_context_data(self, *args, **kwargs):
+        users = User.objects.all()
+        context = super(ProfilePageView, self).get_context_data(*args, **kwargs)
+        page_user = get_object_or_404(User, id=self.kwargs['pk'])
+        context["page_user"] = page_user
+        return context
