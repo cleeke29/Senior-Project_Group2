@@ -5,23 +5,32 @@
 {% block content %}
 
 {% if user.image %}
-
-<img src="{{ user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';" style="max-width: 200px;">
-{{ user }}
+<img src="{{ user.image.url }}" class="rounded img-thumbnail" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';" style="max-width: 200px;">
+<h1 class="d-inline align-bottom">@{{ page_user }}</h1>
 {% else %} 
-<img src="/media/default.jpg" style="max-width: 200px;"> {{ user }}
+<img src="/media/default.jpg" class="rounded img-thumbnail" style="max-width: 200px;">
+<h1 class="d-inline align-bottom">@{{ page_user }}</h1>
 {% endif %} 
 
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %} 
-    <fieldset class="form-group">
-        <legend class="border-bottom mb-4">Profile Info</legend>
-        {{ form.image }}
-    </fieldset>
-    <div class="form-group">
-        <button class="" type="submit">Update</button>
-    </div>
+{% if request.user == page_user %}
+          <a href="{% url 'edit_profile' user.id %}" class="d-inline ms-3 align-bottom">Edit Profile</a>
+{% else %}
+          <a href="{% url 'send_friend_request' userID=page_user.id %}" class="d-inline ms-3 align-bottom">Add Friend</a>
+{% endif %}
 
-</form>
+</br>
+<legend class="border-bottom my-4">About Me</legend>
+
+<div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-offset="0" tabindex="0">
+    <p class="ms-4">
+        {% if page_user.bio %}
+            {{ page_user.bio }}
+        {% else %}
+            I have no bio yet.
+        {% endif %}
+    </p>
+</div>
+
+
 
 {% endblock %} 
