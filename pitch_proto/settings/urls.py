@@ -3,6 +3,7 @@ from . import views
 
 urlpatterns = [
     path('settingsForm/', views.settingsPage, name='settingsForm'),
-    path('settingsUpdate/', views.settingsUpdate, name = 'settingsUpdate')
+    path('settingsUpdate/', views.settingsUpdate, name = 'settingsUpdate'),
+    path('settingsReset/', views.settingsReset, name = 'resetRec')
 ]
  
