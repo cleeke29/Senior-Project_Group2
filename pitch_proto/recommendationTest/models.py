@@ -25,6 +25,9 @@ class preferredMusic(models.Model):
     danceabilityPreferred = models.FloatField(blank = True)
     acousticnessPreferred = models.FloatField(blank = True)
     tempoPreferred = models.FloatField(blank = True)
+    lowSongId = models.TextField(null = True)
+    midSongId = models.TextField(null = True)
+    highSongId = models.TextField(null = True)
 
 class holdMyData(models.Model):
     lowSongId = models.TextField()
