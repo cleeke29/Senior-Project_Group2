@@ -6,6 +6,7 @@ class User(AbstractUser):
     image = models.ImageField(upload_to='profile_images', default='media/default.jpg')
     dark_mode = models.BooleanField(default=True)
     explicit = models.BooleanField(default=True)
+    bio = models.TextField(null=True, blank=True)
     def __str__(self):
         return self.username
 
