@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic.edit import CreateView, UpdateView
 from django.views.generic import DetailView
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, AddFriendForm
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from .models import Friend_Request, User
@@ -78,3 +78,38 @@ class ProfilePageView(DetailView):
         page_user = get_object_or_404(User, id=self.kwargs['pk'])
         context["page_user"] = page_user
         return context
+
+def deleteRequest(request, pk):
+    request_data = Friend_Request.objects.get(id=pk)
+    request_data.delete()
+    return redirect('friends')
+
+def deleteFriend(request, friendID):
+    friendship = request.user.friends.get(id = friendID)
+    request.user.friends.remove(friendship)
+    friendship.friends.remove(request.user)
+    return redirect('friends')
+
+def findUser(request):
+    form = AddFriendForm(request.POST)
+    if form.is_valid():
+        name = None if form.cleaned_data['username'] == None else form.cleaned_data['username']
+        friends = request.user.friends.all()
+        my_pending = Friend_Request.objects.all().filter(to_user_id=request.user.id)
+        all_friend_requests = Friend_Request.objects.all().filter(from_user_id=request.user.id)
+        if name != request.user.username and name:
+            try:
+                friend = User.objects.get(username = name)
+                if friend not in friends:
+                    #print("\n\nHERE\n\n")
+                    # print(my_pending.values_list('from_user_id', flat=True))
+                    # print(all_friend_requests.values_list('to_user_id', flat=True))
+                    if friend.id in my_pending.values_list('from_user_id', flat=True):
+                        request.user.friends.add(friend)
+                        friend.friends.add(request.user)
+                        Friend_Request.objects.filter(from_user_id=friend.id).filter(to_user_id=request.user.id).get().delete()
+                    else:
+                        send_friend_request(request, friend.id)
+            except: 
+                print("User does not exist")
+    return redirect('friends')
