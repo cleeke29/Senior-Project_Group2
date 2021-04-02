@@ -1,5 +1,5 @@
 from django.urls import path 
-from .views import SignUpView, accept_friend_request, send_friend_request, friends_list, ProfilePageView, EditProfileView, profileRedirectView
+from .views import SignUpView, accept_friend_request, send_friend_request, friends_list, ProfilePageView, EditProfileView, profileRedirectView, deleteRequest, deleteFriend, findUser
 from django.views.generic.base import TemplateView
 
 urlpatterns = [ 
@@ -13,6 +13,9 @@ urlpatterns = [
         name='accept_friend_request'),
     path('<int:pk>/profile/', ProfilePageView.as_view(), name='profile'),
     path('<int:pk>/edit_profile/', EditProfileView.as_view(), name='edit_profile'),
-    path('profile/', profileRedirectView, name='find_profile')
+    path('profile/', profileRedirectView, name='find_profile'),
+    path('delete_friend_request/<str:pk>/', deleteRequest, name="delete_request"),
+    path('delete_friend/<int:friendID>/', deleteFriend, name="delete_friend"),
+    path('findUser/', findUser, name="find_user")
     
 ]
