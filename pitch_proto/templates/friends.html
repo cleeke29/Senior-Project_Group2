@@ -19,37 +19,41 @@
     <h2 class="card-header">Friends</h2>
     <div class="card-body">
       <div class="row">
-
-        {% for friend in my_friends %}
-        
-        <div class="col-sm-4 py-2">
-          <div class="card">
-            <div class="card-body">
-              
-              {% if friend.image %} 
-                <img class="img-thumbnail w-25 d-inline"  src="{{ friend.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
-              {% else %} 
-                <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
-              {% endif %}
-                {{ friend }}
-            </br>
-                <a href="#" class="btn btn-danger mt-2">Remove</a>
+        {% if my_friends %}
+          {% for friend in my_friends %}
+          
+          <div class="col-sm-4 py-2">
+            <div class="card">
+              <div class="card-body">
+                
+                {% if friend.image %} 
+                  <img class="img-thumbnail w-25 d-inline"  src="{{ friend.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
+                {% else %} 
+                  <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
+                {% endif %}
+                  {{ friend }}
+              </br>
+                  <a href="{% url 'delete_friend' friendID=friend.id %}" class="btn btn-danger mt-2">Remove</a>
+              </div>
             </div>
           </div>
-        </div>
-        {% endfor %} 
+          {% endfor %} 
+        {% else %}
+          No friends to display. Add a friend below!
+        {% endif %}
       </div>
 
     </div>
     <div class="card-footer">
         
-      <form class="row g-3">
+      <form class="row g-3" method='post' action="{% url 'find_user' %}">
         <div class="col-auto">
           <p class="pt-2">Add a Friend:</p>
         </div>
         <div class="col-auto">
-          <label for="inputUsername" class="visually-hidden">username</label>
-          <input type="username" class="form-control" id="inputUsername" placeholder="username">
+            {% csrf_token %}
+            {{ form.username }}
+
         </div>
         <div class="col-auto">
           <button type="submit" class="btn btn-secondary mb-3">+</button>
@@ -66,26 +70,30 @@
     <h2 class="card-header">Sent Requests</h2>
     <div class="card-body">
       <div class="row">
-        {% for friend_request in all_friend_requests %}
-        
+        {% if all_friend_requests %}
+          {% for friend_request in all_friend_requests %}
+          
 
-        <div class="col-sm-4 py-2">
-          <div class="card">
-            <div class="card-body">
-
-              {% if friend_request.to_user.image %}
-                <img class="img-thumbnail w-25 d-inline" src="{{ friend_request.to_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';" style="max-width: 200px;">
-              {% else %} 
-                <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
-              {% endif %}
-                {{ friend_request.to_user }}
-                </br>
-                <a href="#" class="btn btn-danger mt-2">Unsend</a>
+          <div class="col-sm-4 py-2">
+            <div class="card">
+              <div class="card-body">
+                
+                {% if friend_request.to_user.image %}
+                  <img class="img-thumbnail w-25 d-inline" src="{{ friend_request.to_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';" style="max-width: 200px;">
+                {% else %} 
+                  <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
+                {% endif %}
+                  {{ friend_request.to_user }}
+                  </br>
+                  <a href="{% url 'delete_request' pk=friend_request.id %}" class="btn btn-danger mt-2">Unsend</a>
+              </div>
             </div>
           </div>
-        </div>
-         
-        {% endfor %}
+          
+          {% endfor %}
+        {% else %}
+          No current friend requests.
+        {% endif %}
       </div>
     </div>
   </div>
@@ -97,25 +105,30 @@
     <h2 class="card-header">Pending Requests</h2>
     <div class="card-body">
       <div class="row">
-        {% for friend_request in my_pending  %}
-        
-        <div class="col-sm-4 py-2">
-          <div class="card">
-            <div class="card-body">
+        {% if my_pending %}
+          {% for friend_request in my_pending  %}
+          
+          <div class="col-sm-4 py-2">
+            <div class="card">
+              <div class="card-body">
 
-              {% if friend_request.from_user.image %}
-                <img class="img-thumbnail w-25 d-inline" src="{{ friend_request.from_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
-              {% else %}
-                <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
-              {% endif %}
-                {{ friend_request.from_user }}
-                </br>
-                <a href="{% url 'accept_friend_request' requestID=friend_request.id %}" class="btn btn-danger mt-2">Accept</a>
+                {% if friend_request.from_user.image %}
+                  <img class="img-thumbnail w-25 d-inline" src="{{ friend_request.from_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
+                {% else %}
+                  <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
+                {% endif %}
+                  {{ friend_request.from_user }}
+                  </br>
+                  <a href="{% url 'accept_friend_request' requestID=friend_request.id %}" class="btn btn-danger mt-2">Accept</a>
+              </div>
             </div>
           </div>
-        </div>
-         
-        {% endfor %}
+          
+          {% endfor %}
+
+        {% else %}
+          No pending requests.
+        {% endif %}
       </div>
     </div>
   </div>
@@ -127,28 +140,29 @@
     <h2 class="card-header">People You May Know</h2>
     <div class="card-body">
       <div class="row">
-
-        {% for user in may_know %} 
-       <div class="col-sm-4 py-2">
-          <div class="card">
-            <div class="card-body">
-              {% if user.image %}
-                <img class="img-thumbnail w-25 d-inline" src="{{ user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
-              {% else %} 
-                <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
-              {% endif %}
-              {{ user }} 
-                </br>
-                <a href="{% url 'send_friend_request' userID=user.id %}" class="btn btn-danger mt-2">Request</a>
+        {% if may_know %}
+          {% for user in may_know %} 
+        <div class="col-sm-4 py-2">
+            <div class="card">
+              <div class="card-body">
+                {% if user.image %}
+                  <img class="img-thumbnail w-25 d-inline" src="{{ user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
+                {% else %} 
+                  <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
+                {% endif %}
+                {{ user }} 
+                  </br>
+                  <a href="{% url 'send_friend_request' userID=user.id %}" class="btn btn-danger mt-2">Request</a>
+              </div>
             </div>
           </div>
-        </div>
-        
-        {% endfor %} 
+          
+          {% endfor %}
+        {% else %} 
+          No recommended friends.
+        {% endif %}
 
     </div>
   </div>
-<!--  -->
+
 {% endblock %}
-
-
