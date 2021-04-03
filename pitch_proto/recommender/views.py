@@ -1,15 +1,18 @@
 from recommender.forms import SearchForm
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import Http404, JsonResponse
 from .models import *
 from .forms import *
 from django.views.decorators.http import require_POST, require_GET
 import numpy as np
+from django.core.paginator import Paginator
 
 
 
-def find_albums(song = None, artist = None, album = None, from_year = None, to_year = None):
-    query = Track.objects.filter(artists__icontains = artist)
+def find_albums(number_of_songs = None, song = None, artist = None, album = None, from_year = None, to_year = None):
+    query = Track.objects.all()
+    if artist is not None:
+        query = query.filter(artists__icontains = artist)
     
     if song is not None:
         query = query.filter(track_name__icontains = song)
@@ -23,10 +26,12 @@ def find_albums(song = None, artist = None, album = None, from_year = None, to_y
     if to_year is not None:
         query = query.filter(year__lte = to_year)
 
+    if number_of_songs is None:
+        number_of_songs = 10
     # if genre is not None:
     #     query = 
 
-    return list(query.order_by('-track_popularity').values('track_id','track_name','year'))
+    return query.order_by('-track_popularity').values('track_id')[:number_of_songs]
 
 
 
@@ -44,21 +49,31 @@ def searchform_post(request):
         to_year = None if form.cleaned_data['to_year'] == None else int(form.cleaned_data['to_year'])
         # genre = None if form.cleaned_data['genre'] == None else form.cleaned_data['genre']
         number_of_songs = None if form.cleaned_data['number_of_songs'] == None else int(form.cleaned_data['number_of_songs'])
-
-        albums = find_albums(
-                song,
-                artist,
-                album,
-                from_year,
-                to_year
-            )
-            
-        if number_of_songs is not None:
-            albums = list(np.random.permutation(albums[:10]))[:number_of_songs] 
-        else:
-            albums = list(np.random.permutation(albums[:10]))[:3]
-         
-        return render(request, 'recommender/searchform.html', {'form': form, 'albums': albums })
+        args = {
+            'song': song,
+            'artist': artist,
+            'album': album,
+            'from_year': from_year,
+            'to_year': to_year,
+            'number_of_songs': number_of_songs
+        }
+        # albums = find_albums(
+        #         number_of_songs,
+        #         song,
+        #         artist,
+        #         album,
+        #         from_year,
+        #         to_year
+        #     )
+        # page = request.GET.get('page', 1)
+        # paginator = Paginator(albums, 3)
+        # songs = paginator.page(page)
+        # if number_of_songs is not None:
+        #     albums = list(np.random.permutation(albums[:10]))[:number_of_songs] 
+        # else:
+        #     albums = list(np.random.permutation(albums[:10]))[:3]
+        request.session['export_query'] = args
+        return redirect('results')
     else:
         raise Http404('Something went wrong')
 
@@ -69,3 +84,28 @@ def searchform_get(request):
     form = SearchForm()
     return render(request, 'recommender/searchform.html', {'form': form})
 
+
+def results(request):
+    data = request.session['export_query']
+    albums = find_albums(
+        data['number_of_songs'],
+        data['song'],
+        data['artist'],
+        data['album'],
+        data['from_year'],
+        data['to_year']
+    )
+    page = request.GET.get('page', 1)
+    paginator = Paginator(albums, 3)
+    songs = paginator.page(page)
+
+    return render(request, 'recommender/search_results.html', {'albums': songs})
+
+
+# @require_POST
+# def display_album(request):
+#     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
+#     cursor = conn.cursor()
+#     query = "SELECT track_id, track_number, track_name, REPLACE((REPLACE((REPLACE(artists, '[', '')), ']', '')), ''', ''), album_name, year FROM recommender_track WHERE track_id = " + track_id
+#     cursor.execute(query)
+#     conn.commit()
