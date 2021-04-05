@@ -29,6 +29,7 @@ urlpatterns = [
     path('recommender/', include('recommender.urls')),
     path('group/', include('partyroom.urls')),
     path('recommendation/', include('recommendationTest.urls')),
-    path('settings/', include('settings.urls'))
+    path('settings/', include('settings.urls')),
+    path('playlists/', include('playlists.urls'))
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
