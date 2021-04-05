@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'recommender',
     'recommendationTest',
     'settings',
+    'playlists',
 ]
 
 MIDDLEWARE = [
