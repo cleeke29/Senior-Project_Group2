@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<form id="testform" method='post' action='{% url "newPlaylist" %}'>
+    {% csrf_token %}
+    Description: {{ form.playlistdescription }}
+
+
+    <button class="btn btn-primary btn-lg" type="submit">Submit</button>
+</form>
+
+
+{% for playlist in displayedplaylists %}
+<h1> {{ playlist }} </h1><br>
+{% endfor %}
+
+
+{% endblock %}
