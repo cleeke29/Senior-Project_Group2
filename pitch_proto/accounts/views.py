@@ -46,6 +46,7 @@ def friends_list(request):
     all_friend_requests = Friend_Request.objects.all().filter(from_user_id=request.user.id)
     my_pending = Friend_Request.objects.all().filter(to_user_id=request.user.id)
     
+    form = AddFriendForm()
 
     my_requests_vals = all_friend_requests.filter(from_user_id=request.user.id).values_list('to_user_id', flat=True)
     friend_vals = my_friends.values_list('id', flat=True)
@@ -55,9 +56,10 @@ def friends_list(request):
     return render(request, 'friends.html', {'all_friend_requests': all_friend_requests,
                                             'my_friends': my_friends,
                                             'my_pending': my_pending,
-                                            'may_know': may_know}
+                                            'may_know': may_know,
+                                            'form' : form
+                                            }
                                             )
-
 def profileRedirectView(request):
     return redirect('http://localhost:8000/accounts/' + str(request.user.id) + '/profile')
 
