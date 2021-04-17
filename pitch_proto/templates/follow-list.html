@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}Friends{% endblock %}
+
+{% block head %} 
+
+<style>
+  .icon {
+    max-width: 100px;
+    max-height: 100px;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+      
+  <div class="card">
+    <h2 class="card-header d-flex justify-content-between">
+        <a href = "{% url 'friends' %}" class = "link-dark">Friends</a>
+        Followers/Following
+    </h2>
+    </div>
+
+</br>
+
+  <div class="card">
+    <h2 class="card-header">Following</h2>
+    <div class="card-body">
+      <div class="row">
+        {% if following %}
+          {% for followed_user in following %}
+          
+
+          <div class="col-sm-4 py-2">
+            <div class="card">
+              <div class="card-body">
+                
+                {% if followed_user.image %}
+                  <img class="img-thumbnail w-25 d-inline" src="{{ followed_user.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';" style="max-width: 200px;">
+                {% else %} 
+                  <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
+                {% endif %}
+                  <h3 class="d-inline">
+                    @<a href ="{% url 'go_to_user' followed_user.id %}" class = "link-dark">{{ followed_user }}</a>
+                </h3>
+              </div>
+            </div>
+          </div>
+          
+          {% endfor %}
+        {% else %}
+          You are not currently following any users.
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="card">
+    <h2 class="card-header">Followers</h2>
+    <div class="card-body">
+      <div class="row">
+        {% if followers %}
+          {% for follower in followers  %}
+          
+          <div class="col-sm-4 py-2">
+            <div class="card">
+              <div class="card-body">
+
+                {% if follower.image %}
+                  <img class="img-thumbnail w-25 d-inline" src="{{ follower.image.url }}" onerror="if (this.src != '/media/default.jpg') this.src = '/media/default.jpg';">
+                {% else %}
+                  <img class="img-thumbnail w-25 d-inline" src="/media/default.jpg">
+                {% endif %}
+                <h3 class="d-inline">
+                    @<a href ="{% url 'go_to_user' follower.id %}" class = "link-dark">{{ follower }}</a>
+                </h3>
+              </div>
+            </div>
+          </div>
+          
+          {% endfor %}
+
+        {% else %}
+          No users are currently following you.
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}
