@@ -4,7 +4,7 @@ from django.views.generic import DetailView
 from .forms import CustomUserCreationForm, AddFriendForm
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
-from .models import Friend_Request, User
+from .models import Friend_Request, User, Follows
 from django.http import HttpResponse
 from django.db.models import Q 
 
@@ -74,11 +74,39 @@ class ProfilePageView(DetailView):
     model = User
     template_name = 'profile.html'
 
+    ''' 
+        Context Data:
+        page_user is the user who's information is displayed
+        following is a list of rows from the Follows table where data shows the page_user as a follower
+        followers is a list of rows from the Follows table where data shows the page_user as being followed
+        followers_list is a list of user objects that are following the page_user
+        following_list is a list of user objects that the page_user is following
+        followed_by_user and follows_user are the following and followers count respectively
+        friends is a count of how many friends a user has
+        
+        The generated page can use page_user, followers_list, following_list, followed_by_user, friends and follows_user
+    '''
     def get_context_data(self, *args, **kwargs):
         users = User.objects.all()
         context = super(ProfilePageView, self).get_context_data(*args, **kwargs)
         page_user = get_object_or_404(User, id=self.kwargs['pk'])
+        following = Follows.objects.all().filter(follower_id=page_user.id)
+        followers = Follows.objects.all().filter(following_id=page_user.id)
+        followers_list = []
+        following_list = []
+        for follower in followers:
+            followers_list.append(User.objects.get(id=follower.follower_id))
+        for follow in following:
+            following_list.append(User.objects.get(id=follow.following_id))
+        followed_by_user = following.count()
+        follows_user = followers.count()
+        friends = page_user.friends.all().count()
         context["page_user"] = page_user
+        context["num_following"] = followed_by_user
+        context["num_followers"] = follows_user
+        context["following"] = following_list
+        context["followers"] = followers_list
+        context["friends"] = friends
         return context
 
 def deleteRequest(request, pk):
@@ -115,3 +143,37 @@ def findUser(request):
             except: 
                 print("User does not exist")
     return redirect('friends')
+
+
+@login_required
+def follow(request, userID):
+    follower = request.user
+    following = User.objects.get(id=userID)
+    relationship, created = Follows.objects.get_or_create(
+        follower=follower, following=following
+    )
+    return redirect('http://localhost:8000/accounts/' + str(userID) + '/profile/')
+
+@login_required
+def unfollow(request, userID):
+    relationship = Follows.objects.all().filter(follower_id=request.user.id, following_id=userID)
+    relationship.delete()
+    return redirect('http://localhost:8000/accounts/' + str(userID) + '/profile/')
+
+def followList(request):
+    following = Follows.objects.all().filter(follower_id=request.user.id)
+    followers = Follows.objects.all().filter(following_id=request.user.id)
+    followers_list = []
+    following_list = []
+    for follower in followers:
+        followers_list.append(User.objects.get(id=follower.follower_id))
+    for follow in following:
+        following_list.append(User.objects.get(id=follow.following_id))
+
+    return render(request, 'follow-list.html', {'followers': followers_list,
+                                            'following': following_list,
+                                            }
+                                            )
+
+def goToUser(request, userID):
+    return redirect('http://localhost:8000/accounts/'+ str(userID) + '/profile/')
