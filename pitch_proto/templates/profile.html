@@ -13,9 +13,18 @@
 {% endif %} 
 
 {% if request.user == page_user %}
-          <a href="{% url 'edit_profile' user.id %}" class="d-inline ms-3 align-bottom">Edit Profile</a>
+          <a href="{% url 'edit_profile' user.id %}" class="link-secondary d-inline ms-3 align-bottom">Edit Profile</a>
 {% else %}
-          <a href="{% url 'send_friend_request' userID=page_user.id %}" class="d-inline ms-3 align-bottom">Add Friend</a>
+        <p class="d-inline ms-3 align-bottom">
+          <a href="{% url 'send_friend_request' userID=page_user.id %}" class="link-secondary mx-2">Add Friend</a>
+           | 
+           {% if request.user in followers %}
+           <a href="{% url 'unfollow' userID=page_user.id %}" class="link-secondary d-inline ms-3 align-bottom" >Unfollow</a>
+           {% else %}
+           <a href="{% url 'follow' userID=page_user.id %}" class="link-secondary d-inline ms-3 align-bottom" >Follow</a>
+           {% endif %}
+          
+        </p>
 {% endif %}
 
 </br>
@@ -30,7 +39,19 @@
         {% endif %}
     </p>
 </div>
+<legend class="border-bottom my-4"></legend>
+<h6>
+    <a href = "{% url 'friends' %}" class="link-secondary">{{ friends }} Friends</a>
+    <p class="d-inline mx-3">|</p>
+    <a href = "{% url 'follow-list' %}" class="link-secondary">{{ num_following }} Following</a>
+    <p class="d-inline mx-3">|</p>
+    <a href = "{% url 'follow-list' %}" class="link-secondary">{{ num_followers }} Followers</a>
 
+    {% if request.user in following %}
+    <p class="d-inline mx-3">|</p>
+    Follows you
+    {% endif %}
+</h6>
 
 
 {% endblock %} 
