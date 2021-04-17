@@ -19,3 +19,10 @@ class Friend_Request(models.Model):
         User, related_name='to_user', on_delete=models.CASCADE
     )
 
+class Follows(models.Model):
+    follower = models.ForeignKey(
+        User, related_name='follower', on_delete=models.CASCADE
+    )
+    following = models.ForeignKey(
+        User, related_name='following', on_delete=models.CASCADE
+    )
