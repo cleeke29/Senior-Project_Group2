@@ -86,6 +86,32 @@ def searchform_get(request):
 
 
 def results(request):
+    
+    conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
+    cursor = conn.cursor()
+    if 'add_to_playlist' in request.POST:
+        pass
+        playlist = request.POST['playlists']
+        song = request.POST['SongID']
+        query = "select id from playlists_playlist where description = '" + playlist + "'"
+        cursor.execute(query)
+        playlistid = cursor.fetchone()
+        print(str(playlistid[0]) + ', ' + song)
+        query = "select id from playlists_playlist_songs order by id desc limit 1"
+        cursor.execute(query)
+        newid = cursor.fetchone()[0]
+        newid = newid + 1
+        query = "insert into playlists_playlist_songs values (" + str(newid) + ", " + str(playlistid[0]) + ", '" + song + "')"
+        cursor.execute(query)
+        conn.commit()
+        
+    query = "select description from playlists_playlist where user_id = " + str(request.user.id)
+    cursor.execute(query)
+    userplaylists = cursor.fetchall()
+    tempData = []
+    for playlist in userplaylists:
+        tempData.append(playlist[0])
+    
     data = request.session['export_query']
     albums = find_albums(
         data['number_of_songs'],
@@ -99,7 +125,7 @@ def results(request):
     paginator = Paginator(albums, 3)
     songs = paginator.page(page)
 
-    return render(request, 'recommender/search_results.html', {'albums': songs})
+    return render(request, 'recommender/search_results.html', {'albums': songs, 'playlistdescriptions': tempData})
 
 
 def searchSong(request, song_name):
