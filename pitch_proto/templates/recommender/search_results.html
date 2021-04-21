@@ -8,17 +8,56 @@
     <div class="row">
         {% for album in albums %}    
             <div class="card" style="width: 20.3rem;">
+                <form method="post">
                 <iframe src="https://open.spotify.com/embed/track/{{ album.track_id }}" width="300" height="380" 
                     frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 <div class="card-body">
                   
-                    <input class="btn btn-primary" type="submit" value="Go to Album">
+                    <input class="btn btn-primary" type="submit" value="Go to Album Page">
                     
-                    <!-- <form method='post' action="/recommender/album_info/">
-                        {% csrf_token %}
+                    <!-- <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
+                        <button id="add" class="btn btn-primary btn-lg" type="addToPlaylist">Add To Playlist</button>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            {% for playlist in playlistdescriptions %}
+                          <li><a class="dropdown-item" href="#" onclick="function playlistupdate(){document.getElementById('add').innerHTML = '{{ playlist }}'};playlistupdate()">{{ playlist }}</a></li>
+                          <li><hr class="dropdown-divider"></li>
+                          {% endfor %}
+                        </ul>
+                      </li> -->
 
-                        <button class="btn btn-primary btn-lg" type="submit">Go to Album</button>
-                    </form> -->
+                      <!-- <script language="javascript">
+                      function PlaylistClick(){
+                            selectElement = document.querySelector('#playlists');
+                            output = selectElement.value;
+                            document.getElementById("ResultsZero").action = "advanced-results/" + output + "/";
+                      } 
+                      </script> -->
+
+                      <!-- <form action="advanced-results/" id="ResultsZero" method="post"> -->
+                        <br>
+                        <!-- <label for="playlists">Choose a Playlist:</label> -->
+                        {% csrf_token %}
+                        <select name="playlists" id="playlists">
+                            <option value="default">Select a Playlist</option>
+                            {% for playlist in playlistdescriptions %}
+                                <option value="{{ playlist }}">{{ playlist }}</option>
+                            {% endfor %}
+                        </select>
+                        <select name="SongID" id="SongID" hidden>
+                                <option value='{{ album.track_id }}'>{{ album.track_id }}</option>
+                        </select>
+                        
+                        <input type="submit" value="Submit" name='add_to_playlist'>
+                        <!-- <label for="playlists">Choose a Playlist:</label>
+                        <select name="playlists" id="playlists">
+                            <option value="default">Select a Playlist</option>
+                            {% for playlist in playlistdescriptions %}
+                          <option value="{{ playlist }}" onclick="PlaylistClick()" >{{ playlist }}</option>
+                            {% endfor %}
+                        </select>
+                        <button id="add" class="btn btn-primary btn-lg" type="submit">Add To Playlist</button> -->
+                        </form>
                 </div>
               </div>
         
