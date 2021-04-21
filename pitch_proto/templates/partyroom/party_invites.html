@@ -20,7 +20,7 @@
     {% for r in rooms %} 
         {% if r.dj in friends %}
             <li>
-                {{ r.dj }} - <a href="{% url 'partyroom' user_id=r.dj %}">Join Room - {{ r.link_address }}</a>
+                {{ r.dj }} - <a href="{% url 'partyroom' user_id=r.dj %}">Join Room </a>
             </li>
         {% endif %} 
     {% endfor %}
