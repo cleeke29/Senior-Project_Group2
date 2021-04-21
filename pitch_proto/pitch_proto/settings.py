@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'recommendationTest',
     'settings',
     'playlists',
+    'partyroom',
 ]
 
 MIDDLEWARE = [

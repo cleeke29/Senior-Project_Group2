@@ -37,9 +37,9 @@
                       Group Listen
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <li><a class="dropdown-item" href="{% url 'partyroom' %}">Create Room</a></li>
+                      <li><a class="dropdown-item" href="{% url 'partyroom' user_id=request.user.username %}">Create Room</a></li>
                       <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="#">Join Room</a></li>
+                      <li><a class="dropdown-item" href="{% url 'party_invites' %}">Join Room</a></li>
                     </ul>
                   </li>
                   <li class="nav-item">
