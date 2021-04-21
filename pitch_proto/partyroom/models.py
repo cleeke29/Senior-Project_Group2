@@ -14,3 +14,6 @@ class Room_Invite(models.Model):
     )
     from_invite = models.TextField()
     to_invite = models.TextField()
+
+    class Meta:
+        app_label = 'partyroom'
