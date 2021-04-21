@@ -13,6 +13,14 @@
         {% block head %}{% endblock %} 
       </head>
       <body>
+        <script>
+        function doFunction() {
+          var song = document.getElementById("search_song").value;
+          var url = "http://localhost:8000/recommender/search/" + song;
+          var link = document.getElementById("searchbutton");
+          link.setAttribute('href', url);
+        }
+        </script>
         <nav class="navbar navbar-expand-lg {% if user.dark_mode %}navbar-dark bg-dark{% else %}navbar-light bg-light{% endif %}">
             <div class="container-fluid">
               <a class="navbar-brand" href="{% url 'home' %}">Pitch</a>
@@ -27,10 +35,7 @@
                     <a class="nav-link" href="{% url 'friends' %}">Friends</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Playlists</a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link" href="{% url 'test' %}">Recommendation Test</a>
+                    <a class="nav-link" href="{% url 'playlists' %}">Playlists</a>
                   </li>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -63,9 +68,10 @@
                 </ul>
 
                 <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-secondary" type="submit">Submit</button>
+                  <input id="search_song" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                    <a onclick="doFunction()" class="btn btn-outline-secondary" id="searchbutton">Submit</button>
                 </form>
+                
                 <a class="btn btn-outline-secondary m-3" href="{% url 'advanced-search' %}" role="button">Advanced Search</a>
                 </li>
               </div>
