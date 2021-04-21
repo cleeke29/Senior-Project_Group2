@@ -4,6 +4,8 @@ from django.db import models
 class Listening_Room(models.Model):
     dj = models.TextField()
     link_address = models.URLField()
+    class Meta:
+        app_label = 'partyroom'
 
 
 class Room_Invite(models.Model):
