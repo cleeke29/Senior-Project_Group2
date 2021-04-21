@@ -102,6 +102,24 @@ def results(request):
     return render(request, 'recommender/search_results.html', {'albums': songs})
 
 
+def searchSong(request, song_name):
+    song = song_name
+    artist = None
+    album = None
+    from_year = None
+    to_year = None
+    number_of_songs = None
+    args = {
+        'song': song,
+        'artist': artist,
+        'album': album,
+        'from_year': from_year,
+        'to_year': to_year,
+        'number_of_songs': number_of_songs
+    }
+    request.session['export_query'] = args
+    return redirect('results')
+
 # @require_POST
 # def display_album(request):
 #     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
