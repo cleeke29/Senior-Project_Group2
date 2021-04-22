@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import *
 import psycopg2
 import csv
@@ -15,7 +15,7 @@ def playlists(request):
     for playlist in userplaylists:
         tempData.append(playlist[0])
     form = playlistForm()
-    return render(request, 'playlists.html', {'form' : form, 'displayedplaylists' : tempData})
+    return render(request, 'playlists.html', {'form' : form, 'displayedplaylists' : tempData, 'userid' : request.user.id})
     
 
 def newPlaylist(request):
@@ -25,19 +25,90 @@ def newPlaylist(request):
         conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
         cursor = conn.cursor()
         description = form.cleaned_data['playlistdescription']
-        query = "select count(*) from playlists_playlist"
+        query = "select id from playlists_playlist order by id desc limit 1"
         cursor.execute(query)
         newid = cursor.fetchone()[0]
         newid = newid + 1
         query = "insert into playlists_playlist values (" + str(newid) + ", '" + description + "', " + str(request.user.id) + ")"
         cursor.execute(query)
         conn.commit()
-        query = "select description from playlists_playlist where user_id = " + str(request.user.id)
-        cursor.execute(query)
-        userplaylists = cursor.fetchall()
-        tempData = []
-        for playlist in userplaylists:
-            tempData.append(playlist[0])
-    return render(request, 'playlists.html', {'form' : form, 'displayedplaylists' : tempData})
+    return redirect("/playlists/playlists/")
 
+def displayPlaylist(request, list):
+    tempData = getSongsInList(list, request.user.id)
+    return render(request, 'playlistdisplay.html', {'playlistsongs': tempData, 'playlist': list})
+
+def getSongsInList(list, userid):
+    conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
+    cursor = conn.cursor()
+    query = "select id from playlists_playlist where description = '" + list + "' and user_id = " + str(userid)
+    cursor.execute(query)
+    id = cursor.fetchone()[0]
+    query = "select track_id from playlists_playlist_songs where playlist_id = " + str(id)
+    cursor.execute(query)
+    songs = cursor.fetchall()
+    tempData = []
+    for song in songs:
+        tempData.append(song[0])
+    return tempData
+
+
+def removeSong(request, list, song):
+    remSong(list, song)
+    return redirect("/playlists/playlists/" + list + "/")
+
+def remSong(list, song):
+    conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
+    cursor = conn.cursor()
+    query = "select id from playlists_playlist where description = '" + list + "'"
+    cursor.execute(query)
+    id = cursor.fetchone()[0]
+    query = "delete from playlists_playlist_songs where track_id = '" + song + "' and playlist_id = " + str(id)
+    cursor.execute(query)
+    conn.commit()
+    
+
+def removePlaylist(request, list):
+    tempData = getSongsInList(list, request.user.id)
+    for song in tempData:
+        remSong(list, song)
+    conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
+    cursor = conn.cursor()
+    query = "delete from playlists_playlist where description = '" + list + "' and user_id = " + str(request.user.id)
+    cursor.execute(query)
+    conn.commit()
+    
+    return redirect("/playlists/playlists/")
+
+def copyPlaylist(request, list, id):
+    recipientid = request.user.id
+    if recipientid != id:
+        conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
+        cursor = conn.cursor()
+        query = "select id from playlists_playlist order by id desc limit 1"
+        cursor.execute(query)
+        newplaylistid = cursor.fetchone()[0]
+        newplaylistid = newplaylistid + 1
+        query = "insert into playlists_playlist values (" + str(newplaylistid) + ", '" + list + "', " + str(recipientid) + ")"
+        cursor.execute(query)
+        conn.commit()
+        
+        query = "select id from playlists_playlist where description = '" + list + "' and user_id = " + str(id)
+        cursor.execute(query)
+        bridgingid = cursor.fetchone()[0]
+        query = "select track_id from playlists_playlist_songs where playlist_id = " + str(bridgingid)
+        cursor.execute(query)
+        songs = cursor.fetchall()
+        tempData = []
+        for song in songs:
+            tempData.append(song[0])
+        for songid in tempData:
+            query = "select id from playlists_playlist_songs order by id desc limit 1"
+            cursor.execute(query)
+            newid = cursor.fetchone()[0]
+            newid = newid + 1
+            query = "insert into playlists_playlist_songs values (" + str(newid) + ", " + str(newplaylistid) + ", '" + songid + "')"
+            cursor.execute(query)
+            conn.commit()
+    return redirect("/playlists/playlists/")
 # Create your views here.
