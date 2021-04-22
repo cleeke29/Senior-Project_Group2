@@ -93,7 +93,7 @@ def results(request):
         pass
         playlist = request.POST['playlists']
         song = request.POST['SongID']
-        query = "select id from playlists_playlist where description = '" + playlist + "'"
+        query = "select id from playlists_playlist where description = '" + playlist + "' and user_id = " + str(request.user.id)
         cursor.execute(query)
         playlistid = cursor.fetchone()
         print(str(playlistid[0]) + ', ' + song)
