@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1> {{ playlist }}</h1>
+{% for song in playlistsongs %}
+
+<iframe src="https://open.spotify.com/embed/track/{{ song }}" width="300" height="380" 
+                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+<a class="btn btn-outline-secondary m-3" href="remove/{{ song }}/"> remove </a><br>
+
+
+{% endfor %}
+{% endblock %}
