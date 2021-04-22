@@ -61,7 +61,7 @@ def friends_list(request):
                                             }
                                             )
 def profileRedirectView(request):
-    return redirect('http://localhost:8000/accounts/' + str(request.user.id) + '/profile')
+    return redirect('https://pitchmusic.ddns.net/accounts/' + str(request.user.id) + '/profile')
 
 
 class EditProfileView(UpdateView):
@@ -152,13 +152,13 @@ def follow(request, userID):
     relationship, created = Follows.objects.get_or_create(
         follower=follower, following=following
     )
-    return redirect('http://localhost:8000/accounts/' + str(userID) + '/profile/')
+    return redirect('https://pitchmusic.ddns.net/accounts/' + str(userID) + '/profile/')
 
 @login_required
 def unfollow(request, userID):
     relationship = Follows.objects.all().filter(follower_id=request.user.id, following_id=userID)
     relationship.delete()
-    return redirect('http://localhost:8000/accounts/' + str(userID) + '/profile/')
+    return redirect('https://pitchmusic.ddns.net/accounts/' + str(userID) + '/profile/')
 
 def followList(request):
     following = Follows.objects.all().filter(follower_id=request.user.id)
@@ -176,4 +176,4 @@ def followList(request):
                                             )
 
 def goToUser(request, userID):
-    return redirect('http://localhost:8000/accounts/'+ str(userID) + '/profile/')
+    return redirect('https://pitchmusic.ddns.net/accounts/'+ str(userID) + '/profile/')
