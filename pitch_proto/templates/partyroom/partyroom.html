@@ -26,12 +26,12 @@
             border: 3px solid green;
             padding: 20px;
         }
-
+        /*
         input, button{
             width: 100%;
             box-sizing : border-box;
         }
-
+        */
         video{
             width: 40%;
             height: 40%;
@@ -64,52 +64,68 @@
     
 </body>
 
-<div class="row">
-    <h1 id="welcome">Welcome to the Party!</h1>
+<div>
+    <h1 id="welcome">Welcome to {{ user_id }}'s room</h1>
+    
 
-    <div class="btn-group-vertical media align-self-center mr-3">
-    <iframe id="frame1" src="https://open.spotify.com/embed/track/5ftV7sD0ICApsISUwiyGhy" width="300" height="380" 
-                        frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-<div class="media-body">
-        <button id="sendOfferButton" class="btn btn-primary" onclick="createAndSendOffer()">Call</button>
-        <button id="answerButton" class="btn btn-primary" onclick="createAndSendAnswer()">Answer</button>
-        <button id="hangUpButton" class="btn btn-primary" onclick="disconnectRTCPeerConnection()">Hang Up</button>
-        <button id="startsong" class="btn btn-primary" onclick="startsong()">startsong</button>
-    </div>
-
-</div>        
+           
     
     
     <br/><br/>
     
 
-    <input id="messageInput" type="text" size="80" placeholder="Enter message to send">
-    <button id="sendMessageButton" onclick="sendMessage()">Send Message</button><br/><br/>
-
-    <p style="text-align: center">Tap to Change Front/Back Camera</p>
+    <!-- <p style="text-align: center">Tap to Change Front/Back Camera</p> -->
     
     <div id="videoContainer">
-        <video id="localVideo" onclick="switchMobileCamera()" muted autoplay playsinline></video>
-        <video id="remoteVideo" autoplay playsinline></video>
+        
+
+
+
+         
+
+
+        
     </div>
 
     <table style="width:100%">
         <tr>
           <th>{{ user.username }}</th>
+          <th>Song Name</th>
           <th>Inbound Video Stats</th>
         </tr>
         <tr>
           <td><div readonly id="outBoundstats"></div></td>
+          <td><div>placeholder</div></td>
           <td><div readonly id="inBoundstats"></div></td>
+        </tr>
+        <tr>
+            <td><video id="localVideo" class="float-left" onclick="switchMobileCamera()" muted autoplay playsinline></video></td>
+            <td>
+                <div class="btn-group-vertical media align-self-center mr-3">
+                    <iframe id="frame1" src="https://open.spotify.com/embed/track/1poBO3pO6fkqPYG6n8J5cX" width="300" height="380" 
+                                        frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+                    <div class="media-body">
+                        <button id="sendOfferButton" class="btn btn-primary" onclick="createAndSendOffer()">Call</button>
+                        <button id="answerButton" class="btn btn-primary" onclick="createAndSendAnswer()">Answer</button>
+                        <button id="hangUpButton" class="btn btn-primary" onclick="disconnectRTCPeerConnection()">Hang Up</button>
+                        <button id="startsong" class="btn btn-primary" onclick="startsong()">startsong</button>
+                    </div>
+                </div>
+            </td>
+            <td><video id="remoteVideo" autoplay playsinline></video></td>
         </tr>
     </table> 
 
+    <input id="messageInput" type="text" size="80" placeholder="Enter message to send">
+    <button id="sendMessageButton" class="btn btn-primary" onclick="sendMessage()">Send Message</button><br/><br/>
     
+    <!-- <br/><br/> -->
+    
+    <textarea readonly id="chatTextArea"></textarea>
+    <!-- <br/><br/> -->
+    
+    <textarea readonly id="logs" hidden></textarea>
     <br/><br/>
-    
-    <textarea readonly id="chatTextArea"></textarea><br/><br/>
-    
-    <textarea readonly id="logs"></textarea><br/><br/>
 
 </div>
 
@@ -252,11 +268,11 @@
         // height: { ideal: 2160 } 
 
         constraints = {
-            audio: false,
+            audio: true,
             video: {
-                facingMode: cameraMode
-                // width: { ideal: 1280 },
-                // height: { ideal: 720 }
+                facingMode: cameraMode,
+                width: { ideal: 640 },
+                height: { ideal: 480 }
             }
         } 
 

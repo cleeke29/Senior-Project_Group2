@@ -25,7 +25,7 @@ SECRET_KEY = 's$@2t2j5%ba7^s5io)74vt=#h1i424en54f%xci*#hc5g6sb80'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['pitchmusic.ddns.net', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'recommendationTest',
     'settings',
     'playlists',
+    'partyroom',
 ]
 
 MIDDLEWARE = [
