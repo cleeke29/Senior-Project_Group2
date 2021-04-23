@@ -8,3 +8,6 @@ class SearchForm(forms.Form):
     to_year = forms.IntegerField(required=False)
     # genre = forms.CharField(widget=forms.TextInput(attrs={'size': '50'}))
     number_of_songs = forms.IntegerField(required=False)
+
+class commentForm(forms.Form):
+	comment = forms.CharField();
