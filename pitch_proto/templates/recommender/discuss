@@ -1,0 +1,29 @@
+{% extends 'base.html' %} 
+
+{% block title %}Discussion{% endblock %} 
+
+{% block content %} 
+	{% if exists == "True" %}
+		<h1> Discussion for {{ track_name }}</h1>
+		{% for entry in comments %}
+			{{ entry.username}} : {{ entry.text }} <br>
+		{% endfor %}
+		<br>
+		<form method = 'post' action =  "{% url 'startDiscuss' track_id %}">
+			{% csrf_token %}
+			{{ form.comment }}
+			<br>
+			<button  class="btn btn-success mt-2" type="submit">Enter Comment</button>
+		</form>
+	{% else %}
+		<h1> would you like to start a discussion? </h1>
+		<br>
+		<form method = 'post' action =  "{% url 'startDiscuss' track_id %}">
+			{% csrf_token %}
+			{{ form.comment }}
+			<br>
+			<button  class="btn btn-success mt-2" type="submit">Start Discussion!</button>
+		</form>
+	{% endif %}
+	
+{% endblock %} 
