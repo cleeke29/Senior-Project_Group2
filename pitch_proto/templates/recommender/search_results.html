@@ -13,7 +13,7 @@
                     frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                 <div class="card-body">
                   
-                    <input class="btn btn-primary" type="submit" value="Go to Album Page">
+                    <a href="{% url 'Song_info' track=album.track_id %}" class="btn btn-success mt-2">Info</a>
                     
                     <!-- <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"></a>
