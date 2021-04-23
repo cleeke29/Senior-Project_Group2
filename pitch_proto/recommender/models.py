@@ -33,6 +33,12 @@ class AudioFeatures(models.Model):
 class Track(models.Model):
     # tracks_table_id = models.AutoField(primary_key=True)
     artists = models.TextField(default=None, blank=True, null=True)
+    
+class Comment(models.Model):
+    commentid = models.AutoField(primary_key = True)
+    track_id = models.TextField()
+    username = models.TextField()
+    text = models.TextField()
     track_name = models.TextField(default=None, blank=True, null=True)
     track_id = models.TextField(primary_key=True)
     album_name = models.TextField(default=None, blank=True, null=True)
