@@ -1,0 +1,31 @@
+{% extends 'base.html' %} 
+
+{% block title %}Album{% endblock %} 
+
+{% block content %} 
+<p>
+	<h1> {{ album }} </h1>
+	<br>
+	{% for entry in data %}
+		<div class="card" style="width: 20.3rem;">
+            <iframe src="https://open.spotify.com/embed/track/{{ entry.id }}" width="300" height="380" 
+                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+            <div class="card-body">
+                  
+				Name: {{ entry.name }}
+				<br>
+				Year: {{ entry.year }}
+				<br>
+				Artists: 
+				{% for art in entry.artist %}
+					{{ art }}
+				{% endfor %}
+				<br>
+				<a href="{% url 'Song_info' track=entry.id %}" class="btn btn-success mt-2">Info</a>
+   
+            </div>
+        </div>
+		<br>
+	{% endfor %}
+</p>
+{% endblock %} 
