@@ -1,0 +1,23 @@
+{% extends 'base.html' %} 
+
+{% block title %}Browse{% endblock %} 
+
+{% block content %} 
+<h1> {{ track_name }} </h1>
+<p>
+	Artists: {% for artist in artists %} {{ artist }} {% endfor %}
+	<br />
+	Album: {{ album_name }}<br/> <a href="{% url 'Album_info' album_name %}" class="btn btn-success mt-2">Album Info</a>
+	<br />
+	Track Number: {{ track_number }}
+	<br />
+	Explicit: {{ explicit }}
+	<br />
+	Year: {{ years }}
+	<br />
+	<iframe src="https://open.spotify.com/embed/track/{{ track_id }}" width="300" height="380" 
+                    frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+    <br>
+    <a href="{% url 'discuss' track_id %}" class="btn btn-success mt-2">Discussion</a>
+</p>
+{% endblock %} 
