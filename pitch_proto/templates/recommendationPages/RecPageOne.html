@@ -1,9 +1,9 @@
 {% extends 'base.html' %}
 
 
-{% block title %}Test {{ attrib }}{% endblock %}
+{% block title %}Test danceability {% endblock %}
 {% block content %}
-<form method = 'post' action = '{{ nextUrl }}'>
+<form method = 'post' action = '{% url "test2" %}'>
 	{% csrf_token %}
 	<table>
 		<tr>
