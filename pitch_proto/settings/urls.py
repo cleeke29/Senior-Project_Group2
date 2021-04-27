@@ -3,7 +3,8 @@ from . import views
 
 urlpatterns = [
     path('settingsForm/', views.settingsPage, name='settingsForm'),
-    path('settingsUpdate/', views.settingsUpdate, name = 'settingsUpdate'),
-    path('settingsReset/', views.settingsReset, name = 'resetRec')
+    path('settingsResetRec/', views.settingsReset, name = 'resetRec'),
+    path('settingsToggleDark/', views.toggleDark, name = 'darkMode'),
+    path('settingsChangeUsername/', views.changeUsername, name = 'changeUsername')
 ]
  
