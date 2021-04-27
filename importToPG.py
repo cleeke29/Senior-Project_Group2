@@ -4,6 +4,10 @@ import pandas as pd
 
 
 def remove_dups(csvfile, col, output=None):
+    """
+    This function removes all duplicates from a csv file and prints the
+    total number of unique ids.
+    """
     df = pd.read_csv(csvfile)
     dupfree = df.drop_duplicates(subset=[col], keep='first')
     dups = df.pivot_table(index=[col], aggfunc='size')
@@ -182,12 +186,3 @@ if __name__ == '__main__':
                 continue
     conn2.commit()
 
-# class Genres(models.Model):
-#     # genre_table_id = models.AutoField(primary_key=True)
-#     genre_id = models.TextField(primary_key=True)
-#     # genre_name = models.TextField()
-
-# class Categories(models.Model):
-#     # categories_table_id = models.AutoField(primary_key=True)
-#     category_id = models.TextField(primary_key=True)
-#     category_name = models.TextField()

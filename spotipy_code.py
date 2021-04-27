@@ -1,6 +1,7 @@
 """
 @author: Edward Callihan
-Last Updated: 3/3/2021
+Created: 3/3/2021
+Last Updated: 4/27/2021 -> comments
 
 """
 
@@ -9,7 +10,10 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import csv
 import re
 
-
+"""
+This method breaks csv files into smaller csv files to avoid timing out in the 
+spotify api.
+"""
 def break_up_csv(input_csv, size_of_chunks=200000):
     lines = []
     with open(input_csv, 'r') as f:
