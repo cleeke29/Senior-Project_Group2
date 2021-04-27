@@ -137,7 +137,7 @@ def getRecs(dataType, id):
 	data = cursor.fetchone()[0]
 	datalow = data - stddev
 	datahigh = data + stddev
-	query = 'select features_id from recommender_audiofeatures where "' + dataType + '" > ' + str(datalow) + ' and ' + dataType + ' < ' + str(datahigh) + ' order by random() limit 1'
+	query = 'select features_id from recommender_audiofeatures, recommender_track where features_id = track_id and track_popularity >= 7.5 and "' + dataType + '" > ' + str(datalow) + ' and ' + dataType + ' < ' + str(datahigh) + ' order by random() limit 1'
 	cursor.execute(query)
 	return cursor.fetchone()[0]
 
@@ -190,7 +190,7 @@ def RecPageOneView(request):
 	songids = findSong('danceability', Aggregates, user.explicit)
 	form = genreForm()
 	request.session['oldSongs'] = songids
-	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2], 'nextUrl' : '../test2/', 'attrib' : 'Danceability'})
+	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
 
 def RecPageTwoView(request):
 	form = genreForm(request.POST)
@@ -200,17 +200,17 @@ def RecPageTwoView(request):
 	songids = findSong('acousticness', Aggregates, user.explicit)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
-	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2], 'nextUrl' : '../test3/', 'attrib' : 'Acousticness'})
+	return render(request, 'recommendationPages/RecPageTwo.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
 
 def RecPageThreeView(request):
 	form = genreForm(request.POST)
 	user = request.user
-	writeToPreferences(request, form, 'tempo', user.id)
+	writeToPreferences(request, form, 'acousticness', user.id)
 	Aggregates = getAggregate('energy')
 	songids = findSong('energy', Aggregates, user.explicit)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
-	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2], 'nextUrl' : '../test4/', 'attrib' : 'Energy'})
+	return render(request, 'recommendationPages/RecPageThree.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
 
 def RecPageFourView(request):
 	form = genreForm(request.POST)
@@ -220,7 +220,7 @@ def RecPageFourView(request):
 	songids = findSong('loudness', Aggregates, user.explicit)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
-	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2], 'nextUrl' : '../test5/', 'attrib' : 'Loudness'})
+	return render(request, 'recommendationPages/RecPageFour.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
 
 def RecPageFiveView(request):
 	form = genreForm(request.POST)
@@ -230,7 +230,7 @@ def RecPageFiveView(request):
 	songids = findSong('speechiness', Aggregates, user.explicit)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
-	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2], 'nextUrl' : '../test6/', 'attrib' : 'Speechiness'})
+	return render(request, 'recommendationPages/RecPageFive.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
 
 def RecPageSixView(request):
 	form = genreForm(request.POST)
@@ -240,7 +240,7 @@ def RecPageSixView(request):
 	songids = findSong('instrumentalness', Aggregates, user.explicit)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
-	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2], 'nextUrl' : '../test7/', 'attrib' : 'Instrumentalness'})
+	return render(request, 'recommendationPages/RecPageSix.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
 
 def RecPageSevenView(request):
 	form = genreForm(request.POST)
@@ -250,7 +250,7 @@ def RecPageSevenView(request):
 	songids = findSong('liveness', Aggregates, user.explicit)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
-	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2], 'nextUrl' : '../test8/', 'attrib' : 'Liveness'})
+	return render(request, 'recommendationPages/RecPageSeven.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1]})
 
 def RecPageEightView(request):
 	form = genreForm(request.POST)
@@ -260,7 +260,7 @@ def RecPageEightView(request):
 	songids = findSong('valence', Aggregates, user.explicit)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
-	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2], 'nextUrl' : '../test9/', 'attrib' : 'Valence'})
+	return render(request, 'recommendationPages/RecPageEight.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
 
 def RecPageNineView(request):
 	form = genreForm(request.POST)
@@ -270,7 +270,7 @@ def RecPageNineView(request):
 	songids = findSong('tempo', Aggregates, user.explicit)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
-	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2], 'nextUrl' : '../result/', 'attrib' : 'Tempo'})
+	return render(request, 'recommendationPages/RecPageNine.html', {'form' : form, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
 
 def ResultPageView(request):
 	form = genreForm(request.POST)
