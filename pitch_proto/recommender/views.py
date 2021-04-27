@@ -262,7 +262,7 @@ def Album_info(request, album):
             self.track_number = track_number
 
     newData = []
-    x = 13
+    x = len(names) - 1
     while (x >= 0):
         newData.append(songObject(names[x], ids[x], artists[x], explicits[x], years[x], track_numbers[x]))
         x = x - 1

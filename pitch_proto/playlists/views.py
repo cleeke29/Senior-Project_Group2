@@ -4,7 +4,7 @@ import psycopg2
 import csv
 import pandas as pd
 from .models import playlist
-
+#load playlist page
 def playlists(request):
     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
     cursor = conn.cursor()
@@ -18,7 +18,7 @@ def playlists(request):
     form = playlistForm()
     return render(request, 'playlists.html', {'form' : form, 'displayedplaylists' : tempData, 'userid' : request.user.id, 'host': request.get_host()})
     
-
+#create new playlist
 def newPlaylist(request):
 
     form = playlistForm(request.POST)
@@ -38,11 +38,11 @@ def newPlaylist(request):
         cursor.execute(query)
         conn.commit()
     return redirect("/playlists/playlists/")
-
+#display playlist on page
 def displayPlaylist(request, list):
     tempData = getSongsInList(list, request.user.id)
     return render(request, 'playlistdisplay.html', {'playlistsongs': tempData, 'playlist': list})
-
+#get songs in a playlist
 def getSongsInList(list, userid):
     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
     cursor = conn.cursor()
@@ -57,12 +57,17 @@ def getSongsInList(list, userid):
         tempData.append(song[0])
     return tempData
 
-
+#reloads playlist display page after deleting song
 def removeSong(request, list, song):
     remSong(list, song, request.user.id)
     return redirect("/playlists/playlists/" + list + "/")
+<<<<<<< HEAD
 
 def remSong(list, song, user):
+=======
+#removes song from playlist
+def remSong(list, song):
+>>>>>>> 40ed088393a422615cda228006adb49a412752b3
     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
     cursor = conn.cursor()
     query = "select id from playlists_playlist where description = '" + list + "' and user_id = " + str(user)
@@ -72,7 +77,7 @@ def remSong(list, song, user):
     cursor.execute(query)
     conn.commit()
     
-
+#removes all songs in playlist and then deletes playlist
 def removePlaylist(request, list):
     tempData = getSongsInList(list, request.user.id)
     for song in tempData:
@@ -84,7 +89,7 @@ def removePlaylist(request, list):
     conn.commit()
     
     return redirect("/playlists/playlists/")
-
+#Copy a playlist from one user to another via share link
 def copyPlaylist(request, list, id):
     recipientid = request.user.id
     if recipientid != id:

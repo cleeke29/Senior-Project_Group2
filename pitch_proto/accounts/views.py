@@ -8,12 +8,13 @@ from .models import Friend_Request, User, Follows
 from django.http import HttpResponse
 from django.db.models import Q 
 
+#SignUpView is a class-based view for the user signup form. Redirects to login the user on success.
 class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'registration/signup.html'
 
-# Create your views here.
+#send_friend_request allows a user to send a friend request to the specified user ID.
 @login_required
 def send_friend_request(request, userID):
     from_user = request.user
@@ -27,6 +28,7 @@ def send_friend_request(request, userID):
     # else:
     #     return HttpResponse('friend request was already sent')
 
+#accept_friend_request allows the requesting user to accept a specified friend request, creating the friendship relation between them and the other user.
 @login_required
 def accept_friend_request(request, requestID):
     friend_request = Friend_Request.objects.get(id=requestID)
@@ -39,6 +41,8 @@ def accept_friend_request(request, requestID):
     # else:
     #     return HttpResponse('friend request not accepted')
 
+#friends_list is a view for the Friends page. Provides data for friend requests that are outgoing/incoming, a list of users to add as a friend, 
+#   a list of the user's friends, and the form object used to add a user by their username.
 @login_required
 def friends_list(request):
     allusers = User.objects.all().filter(is_superuser=False).exclude(id=request.user.id)
@@ -60,16 +64,21 @@ def friends_list(request):
                                             'form' : form
                                             }
                                             )
+
+#profileRedirectView redirects to the request user's profile
 def profileRedirectView(request):
     return redirect('https://pitchmusic.ddns.net/accounts/' + str(request.user.id) + '/profile')
 
-
+#EditProfileView is a class-based view for the Edit profile form for a user. Can alter bio/profile picture fields. Returns user to their profile on success.
 class EditProfileView(UpdateView):
     model = User
     template_name = 'edit_profile.html'
     success_url = reverse_lazy('find_profile')
     fields = ['bio', 'image']
 
+#ProfilePageView is a class-based view for the profile page of a user. 
+#   Pfp is passed context data that includes followers/following + the count of each, a count of the user's friends, 
+#       and the user who's profile we are viewing.
 class ProfilePageView(DetailView):
     model = User
     template_name = 'profile.html'
@@ -108,18 +117,22 @@ class ProfilePageView(DetailView):
         context["followers"] = followers_list
         context["friends"] = friends
         return context
-
+    
+#deleteRequest deletes an existing, specified friend request.
 def deleteRequest(request, pk):
     request_data = Friend_Request.objects.get(id=pk)
     request_data.delete()
     return redirect('friends')
 
+#deleteFriend function is used to remove the friendship relation from the requesting user and the user with the specified id.
 def deleteFriend(request, friendID):
     friendship = request.user.friends.get(id = friendID)
     request.user.friends.remove(friendship)
     friendship.friends.remove(request.user)
     return redirect('friends')
 
+#findUser is used by the form on the Friends page. The form passes a string, and we attempt to find a username to match
+#   then we send a friend request to the user if one is found.
 def findUser(request):
     form = AddFriendForm(request.POST)
     if form.is_valid():
@@ -144,7 +157,7 @@ def findUser(request):
                 print("User does not exist")
     return redirect('friends')
 
-
+#follow function allows a user to follow a specified user by their ID
 @login_required
 def follow(request, userID):
     follower = request.user
@@ -154,12 +167,14 @@ def follow(request, userID):
     )
     return redirect('https://pitchmusic.ddns.net/accounts/' + str(userID) + '/profile/')
 
+#unfollow function allows a user to unfollow a specified user by ID.
 @login_required
 def unfollow(request, userID):
     relationship = Follows.objects.all().filter(follower_id=request.user.id, following_id=userID)
     relationship.delete()
     return redirect('https://pitchmusic.ddns.net/accounts/' + str(userID) + '/profile/')
 
+#followList provides information about followers/following for the Following page of the site
 def followList(request):
     following = Follows.objects.all().filter(follower_id=request.user.id)
     followers = Follows.objects.all().filter(following_id=request.user.id)
@@ -174,6 +189,6 @@ def followList(request):
                                             'following': following_list,
                                             }
                                             )
-
+# Function is called to bring user to a specified user's profile page
 def goToUser(request, userID):
     return redirect('https://pitchmusic.ddns.net/accounts/'+ str(userID) + '/profile/')
