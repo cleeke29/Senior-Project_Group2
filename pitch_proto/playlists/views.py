@@ -12,10 +12,11 @@ def playlists(request):
     cursor.execute(query)
     userplaylists = cursor.fetchall()
     tempData = []
+
     for playlist in userplaylists:
         tempData.append(playlist[0])
     form = playlistForm()
-    return render(request, 'playlists.html', {'form' : form, 'displayedplaylists' : tempData, 'userid' : request.user.id})
+    return render(request, 'playlists.html', {'form' : form, 'displayedplaylists' : tempData, 'userid' : request.user.id, 'host': request.get_host()})
     
 
 def newPlaylist(request):
@@ -27,8 +28,12 @@ def newPlaylist(request):
         description = form.cleaned_data['playlistdescription']
         query = "select id from playlists_playlist order by id desc limit 1"
         cursor.execute(query)
-        newid = cursor.fetchone()[0]
-        newid = newid + 1
+        tempnewid = cursor.fetchone()
+        if tempnewid is not None:
+            newid = tempnewid[0]
+            newid = newid + 1
+        else:
+            newid = 1
         query = "insert into playlists_playlist values (" + str(newid) + ", '" + description + "', " + str(request.user.id) + ")"
         cursor.execute(query)
         conn.commit()
@@ -54,13 +59,13 @@ def getSongsInList(list, userid):
 
 
 def removeSong(request, list, song):
-    remSong(list, song)
+    remSong(list, song, request.user.id)
     return redirect("/playlists/playlists/" + list + "/")
 
-def remSong(list, song):
+def remSong(list, song, user):
     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
     cursor = conn.cursor()
-    query = "select id from playlists_playlist where description = '" + list + "'"
+    query = "select id from playlists_playlist where description = '" + list + "' and user_id = " + str(user)
     cursor.execute(query)
     id = cursor.fetchone()[0]
     query = "delete from playlists_playlist_songs where track_id = '" + song + "' and playlist_id = " + str(id)
@@ -71,7 +76,7 @@ def remSong(list, song):
 def removePlaylist(request, list):
     tempData = getSongsInList(list, request.user.id)
     for song in tempData:
-        remSong(list, song)
+        remSong(list, song, request.user.id)
     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
     cursor = conn.cursor()
     query = "delete from playlists_playlist where description = '" + list + "' and user_id = " + str(request.user.id)
@@ -89,6 +94,7 @@ def copyPlaylist(request, list, id):
         cursor.execute(query)
         newplaylistid = cursor.fetchone()[0]
         newplaylistid = newplaylistid + 1
+
         query = "insert into playlists_playlist values (" + str(newplaylistid) + ", '" + list + "', " + str(recipientid) + ")"
         cursor.execute(query)
         conn.commit()

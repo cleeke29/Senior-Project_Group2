@@ -28,7 +28,7 @@
     <a class="btn btn-outline-secondary m-3" href="{{ playlist }}/"> {{ playlist }} </a>
     <a class="btn btn-outline-secondary m-3" href="remove/{{ playlist }}/"> remove </a>
     <button onclick="copyShareLink('{{ playlist }}')">Copy Share Link</button>
-    <input type="text" value="localhost:8000/playlists/playlists/copyNewPlaylist/{{ playlist }}/{{ userid }}/" id="{{ playlist }}" readonly><br>
+    <input type="text" value="{{ host }}/playlists/playlists/copyNewPlaylist/{{ playlist }}/{{ userid }}/" id="{{ playlist }}" readonly><br>
 
 {% endfor %}
 

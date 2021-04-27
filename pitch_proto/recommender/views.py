@@ -104,8 +104,12 @@ def results(request):
         print(str(playlistid[0]) + ', ' + song)
         query = "select id from playlists_playlist_songs order by id desc limit 1"
         cursor.execute(query)
-        newid = cursor.fetchone()[0]
-        newid = newid + 1
+        newidholder = cursor.fetchone()
+        if newidholder is not None:
+            newid = newidholder[0]
+            newid = newid + 1
+        else:
+            newid = 1
         query = "insert into playlists_playlist_songs values (" + str(newid) + ", " + str(playlistid[0]) + ", '" + song + "')"
         cursor.execute(query)
         conn.commit()
