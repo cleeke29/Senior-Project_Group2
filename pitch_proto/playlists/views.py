@@ -63,8 +63,8 @@ def removeSong(request, list, song):
     return redirect("/playlists/playlists/" + list + "/")
 #<<<<<<< HEAD
 
-def remSong(list, song, user):
-=======
+#def remSong(list, song, user):
+#=======
 #removes song from playlist
 def remSong(list, song):
 #>>>>>>> 40ed088393a422615cda228006adb49a412752b3
