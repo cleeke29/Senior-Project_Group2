@@ -48,8 +48,8 @@ def break_up_csv(input_csv, size_of_chunks=200000):
 
 class SpotipyDataMaker:
     def __init__(self, client_id, client_secret):
-        self.client_credentials_manager = SpotifyClientCredentials(client_id='71c78c8e5cca415cbdbbbda0454407b6',
-                                                                   client_secret='e207718d7a034b838f38dc445225f8a7')
+        self.client_credentials_manager = SpotifyClientCredentials(client_id='',
+                                                                   client_secret='')
         self.sp = spotipy.Spotify(client_credentials_manager=self.client_credentials_manager, requests_timeout=20)
         self.scope = "user-library-read"
 
