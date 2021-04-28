@@ -61,13 +61,13 @@ def getSongsInList(list, userid):
 def removeSong(request, list, song):
     remSong(list, song, request.user.id)
     return redirect("/playlists/playlists/" + list + "/")
-<<<<<<< HEAD
+#<<<<<<< HEAD
 
 def remSong(list, song, user):
 =======
 #removes song from playlist
 def remSong(list, song):
->>>>>>> 40ed088393a422615cda228006adb49a412752b3
+#>>>>>>> 40ed088393a422615cda228006adb49a412752b3
     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
     cursor = conn.cursor()
     query = "select id from playlists_playlist where description = '" + list + "' and user_id = " + str(user)
