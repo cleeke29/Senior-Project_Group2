@@ -9,7 +9,7 @@ import recommendationTest.views
 def settingsPage(request):
 	form = settingForm()
 	return render(request, 'settings.html', {'form' : form})
-
+#allows user to change user name if it is not blank
 def changeUsername(request):
 	user = request.user
 	form = settingForm(request.POST)
@@ -23,7 +23,7 @@ def changeUsername(request):
 		conn.commit()
 	form = settingForm()
 	return render(request, 'settings.html', {'form' : form})
-
+#will toggle on or off dark mode
 def toggleDark(request):
 	user = request.user
 	conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
@@ -39,7 +39,7 @@ def toggleDark(request):
 	conn.commit()
 	form = settingForm()
 	return render(request, 'settings.html', {'form' : form})
-
+#will reset the prefferences, this will put your preffered back to the averages.
 def settingsReset(request):
 	form = settingForm()
 	conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
@@ -60,4 +60,6 @@ def settingsReset(request):
 	songids.append(recommendationTest.views.getRecs('valence', id))
 	recommendationTest.views.buildQuickRec(id, songids)
 	return render(request, 'settings.html', {'form' : form})
+
+
 
