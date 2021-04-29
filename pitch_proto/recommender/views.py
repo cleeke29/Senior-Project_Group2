@@ -155,17 +155,20 @@ def searchSong(request, song_name):
     request.session['export_query'] = args
     return redirect('results')
 
+#We found the best way to iterate through an object in the HTML was to give it its own objec
 class commentObject:
     def __init__(self, username, text):
         self.username = username
         self.text = text
-
+#Retrieves the comments for a given track and orders by comment id
 def getComments(track):
     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
     cursor = conn.cursor()
-    query = "select * from recommender_comment where track_id = '" + str(track) + "' order by commentid DESC"
+    query = "select username, text from recommender_comment where track_id = '" + str(track) + "' order by commentid DESC"
     cursor.execute(query)
     return cursor.fetchall()
+#Will check if a discussion has been started for a song, if it has it will gather its comments and if it hasn't
+#it will allow the user to start
 def discuss(request, track):
     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
     cursor = conn.cursor()
@@ -181,8 +184,8 @@ def discuss(request, track):
         usernames = []
         texts = []
         for entry in comments:
-            usernames.append(entry[1])
-            texts.append(entry[2])
+            usernames.append(entry[0])
+            texts.append(entry[1])
         commentarray = []
         x = len(comments) - 1
         while(x >= 0):
@@ -190,7 +193,7 @@ def discuss(request, track):
             x = x - 1
         return render(request, 'recommender/discuss.html', {'exists' : 'True', 'track_id' : track, 'form' : form, 'track_name' : data[0], 'comments' : commentarray})
     return render(request, 'recommender/discuss.html', {'exists' : 'False', 'track_id' : track, 'form' : form, 'track_name' : data[0]})
-
+#will begin a comment thread on a song
 def startDiscuss(request, track):
     form = commentForm(request.POST)
     text = ''
@@ -208,8 +211,8 @@ def startDiscuss(request, track):
     usernames = []
     texts = []
     for entry in comments:
-        usernames.append(entry[1])
-        texts.append(entry[2])
+        usernames.append(entry[0])
+        texts.append(entry[1])
     commentarray = []
     x = len(comments) - 1
     while(x >= 0):
@@ -217,7 +220,7 @@ def startDiscuss(request, track):
         x = x - 1
     return render(request, 'recommender/discuss.html', {'exists' : 'True', 'track_id' : track, 'form' : form, 'track_name' : data[0], 'comments' : commentarray})
     
-
+#gets infromation for the song information page
 def Song_info(request, track):
     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
     cursor = conn.cursor()
@@ -232,7 +235,7 @@ def Song_info(request, track):
                                                         'explicit' : data[4],
                                                         'years' : data[6],
                                                         'track_number' : data[7]})
-
+#gets a list of song info for a albums songs
 def Album_info(request, album):
     conn = psycopg2.connect("host=localhost dbname=pitch_db user=admin password=admin")
     cursor = conn.cursor()
@@ -275,3 +278,4 @@ def Album_info(request, album):
 #     query = "SELECT track_id, track_number, track_name, REPLACE((REPLACE((REPLACE(artists, '[', '')), ']', '')), ''', ''), album_name, year FROM recommender_track WHERE track_id = " + track_id
 #     cursor.execute(query)
 #     conn.commit()
+
