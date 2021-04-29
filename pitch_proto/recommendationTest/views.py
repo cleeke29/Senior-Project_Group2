@@ -5,6 +5,8 @@ import csv
 import pandas as pd
 
 connectionString = "host=localhost dbname=pitch_db user=admin password=admin"
+#since our data set is not changing, I found it better to hard code the aggregate functions rather
+#than query them every time you need them
 def getAggregate(dataType):
 	Aggregates = []
 	# lowerbound, higher bound, avg, stddev
@@ -63,14 +65,9 @@ def getAggregate(dataType):
 		Aggregates.append(0.28306973582013895)
 		return Aggregates
 
-def explicitCheck(id):
-	conn = psycopg2.connect(connectionString)
-	cursor = conn.cursor()
-	query = "select explicit from recommender_track where track_id = '" + str(id) +"'"
-	cursor.execute(query)
-	return cursor.fetchone()[0]
+#This will find songs for a given data type and return three songs with its specific attribute parameters
 
-def findSong(dataType, Aggregates, explicit):
+def findSong(dataType, Aggregates):
 	conn = psycopg2.connect(connectionString)
 	cursor = conn.cursor()
 	songids = []
@@ -84,7 +81,9 @@ def findSong(dataType, Aggregates, explicit):
 	cursor.execute(query)
 	songids.append(cursor.fetchone()[0])
 	return songids
-	
+
+#Given the previous song ids, this will return the arribute of those songs
+#in order to use them in preferences	
 # mid low high
 def getPrevious(request, datatype):
 	conn = psycopg2.connect(connectionString)
@@ -102,6 +101,7 @@ def getPrevious(request, datatype):
 	attribs.append(cursor.fetchone()[0])
 	return attribs
 
+#Will take the average of the requested songs arrtibute and write it to the DB
 def writeToPreferences(request, form, dataType, id):
 	if form.is_valid():
 		likeLow = form.cleaned_data['sampleOne']
@@ -127,7 +127,7 @@ def writeToPreferences(request, form, dataType, id):
 		query = 'insert into "recommendationTest_preferredmusic" values (' + str(id) + ', '+ str(attrib) + ', 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0 ,1.0) on conflict (id) do update set "'+ dataType +'Preferred" = '+ str(attrib)
 		cursor.execute(query)
 		conn.commit()
-
+#will retrieve a song given a preference 
 def getRecs(dataType, id):
 	conn = psycopg2.connect(connectionString)
 	cursor = conn.cursor()
@@ -137,10 +137,13 @@ def getRecs(dataType, id):
 	data = cursor.fetchone()[0]
 	datalow = data - stddev
 	datahigh = data + stddev
-	query = 'select features_id from recommender_audiofeatures, recommender_track where features_id = track_id and track_popularity >= 7.5 and "' + dataType + '" > ' + str(datalow) + ' and ' + dataType + ' < ' + str(datahigh) + ' order by random() limit 1'
+	query = 'select features_id from recommender_audiofeatures where "' + dataType + '" > ' + str(datalow) + ' and ' + dataType + ' < ' + str(datahigh) + ' order by random() limit 1'
 	cursor.execute(query)
 	return cursor.fetchone()[0]
-
+#quick Rec is a tool we use to ensure the querying time is not too long every you want 
+#to see your recommendations, it builds a table of recommendations when you 
+#create your account and finish the test, so that there is a small easy table to query
+#from each time you need recommended songs
 def buildQuickRec(user_id, song_id):
 	conn = psycopg2.connect(connectionString)
 	cursor = conn.cursor()
@@ -157,12 +160,14 @@ def grabQuickRec(user_id):
 	cursor.execute(query)
 	songids = cursor.fetchall()
 	return songids
+#tool for gettingn a list of preferrences
 def getPreferrences(id):
 	conn = psycopg2.connect(connectionString)
 	cursor = conn.cursor()
 	query = 'select "danceabilityPreferred", "acousticnessPreferred", "tempoPreferred", "energyPreferred", "loudnessPreferred", "speechinessPreferred", "instrumentalnessPreferred", "livenessPreferred", "valencePreferred" from "recommendationTest_preferredmusic" where id = ' + str(id)
 	cursor.execute(query)
 	return cursor.fetchone()
+#tool for creating proper tables on account creation
 def tableEntry(id):
 	conn = psycopg2.connect(connectionString)
 	cursor = conn.cursor()
@@ -183,11 +188,11 @@ def tableEntry(id):
 		songids.append(getRecs('liveness', id))
 		songids.append(getRecs('valence', id))
 		buildQuickRec(id, songids)
-
+#render requests for the test pages.
 def RecPageOneView(request):
 	Aggregates = getAggregate('danceability')
 	user = request.user
-	songids = findSong('danceability', Aggregates, user.explicit)
+	songids = findSong('danceability', Aggregates)
 	form = genreForm()
 	request.session['oldSongs'] = songids
 	return render(request, 'recommendationPages/RecPageOne.html', {'form' : form, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
@@ -197,7 +202,7 @@ def RecPageTwoView(request):
 	user = request.user
 	writeToPreferences(request, form, 'danceability', user.id)
 	Aggregates = getAggregate('acousticness')
-	songids = findSong('acousticness', Aggregates, user.explicit)
+	songids = findSong('acousticness', Aggregates)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
 	return render(request, 'recommendationPages/RecPageTwo.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
@@ -207,7 +212,7 @@ def RecPageThreeView(request):
 	user = request.user
 	writeToPreferences(request, form, 'acousticness', user.id)
 	Aggregates = getAggregate('energy')
-	songids = findSong('energy', Aggregates, user.explicit)
+	songids = findSong('energy', Aggregates)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
 	return render(request, 'recommendationPages/RecPageThree.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
@@ -217,7 +222,7 @@ def RecPageFourView(request):
 	user = request.user
 	writeToPreferences(request, form, 'energy', user.id)
 	Aggregates = getAggregate('loudness')
-	songids = findSong('loudness', Aggregates, user.explicit)
+	songids = findSong('loudness', Aggregates)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
 	return render(request, 'recommendationPages/RecPageFour.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
@@ -227,7 +232,7 @@ def RecPageFiveView(request):
 	user = request.user
 	writeToPreferences(request, form, 'loudness', user.id)
 	Aggregates = getAggregate('speechiness')
-	songids = findSong('speechiness', Aggregates, user.explicit)
+	songids = findSong('speechiness', Aggregates)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
 	return render(request, 'recommendationPages/RecPageFive.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
@@ -237,7 +242,7 @@ def RecPageSixView(request):
 	user = request.user
 	writeToPreferences(request, form, 'speechiness', user.id)
 	Aggregates = getAggregate('instrumentalness')
-	songids = findSong('instrumentalness', Aggregates, user.explicit)
+	songids = findSong('instrumentalness', Aggregates)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
 	return render(request, 'recommendationPages/RecPageSix.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
@@ -247,7 +252,7 @@ def RecPageSevenView(request):
 	user = request.user
 	writeToPreferences(request, form, 'instrumentalness', user.id)
 	Aggregates = getAggregate('liveness')
-	songids = findSong('liveness', Aggregates, user.explicit)
+	songids = findSong('liveness', Aggregates)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
 	return render(request, 'recommendationPages/RecPageSeven.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1]})
@@ -257,7 +262,7 @@ def RecPageEightView(request):
 	user = request.user
 	writeToPreferences(request, form, 'liveness', user.id)
 	Aggregates = getAggregate('valence')
-	songids = findSong('valence', Aggregates, user.explicit)
+	songids = findSong('valence', Aggregates)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
 	return render(request, 'recommendationPages/RecPageEight.html', {'form' : form2, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
@@ -267,7 +272,7 @@ def RecPageNineView(request):
 	user = request.user
 	writeToPreferences(request, form, 'valence', user.id)
 	Aggregates = getAggregate('tempo')
-	songids = findSong('tempo', Aggregates, user.explicit)
+	songids = findSong('tempo', Aggregates)
 	form2 = genreForm()
 	request.session['oldSongs'] = songids
 	return render(request, 'recommendationPages/RecPageNine.html', {'form' : form, 'songidMid' : songids[0], 'songidLow' : songids[1], 'songidHigh' : songids[2]})
